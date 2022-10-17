@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  sample:
+    container_name: clients_ui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
