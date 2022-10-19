@@ -1,7 +1,11 @@
+import React from 'react'
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { useKeycloak } from "@react-keycloak/web";
 
 function TopBar() {
+    const { keycloak, initialized } = useKeycloak();
+
     return (
         <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: 'rgba(39,170,226,255)' }} variant="light">
                 <Navbar.Brand href="#home" style={{ paddingLeft: '4%' }}>
@@ -25,6 +29,7 @@ function TopBar() {
                                 width="47"
                                 height="47"
                                 className="d-inline-block align-top"
+                                onClick={() => keycloak.login()}
                             />
                         </Nav.Link>
                     </Nav>
