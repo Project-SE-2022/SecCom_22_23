@@ -13,6 +13,23 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
+## Run Sites Management API
+
+Use the following commands in the Virtual Environment
+
+```bash
+docker-compose build
+docker-compose up
+```
+
+Should run on port 8050
+
+To access administrator go on port 8050/admin with the following credentials:
+
+usernaem: smapiAdmin
+
+password: smapi12345
+
 ## Useful Django Commands
 
 Use the following commands in the Virtual Environment

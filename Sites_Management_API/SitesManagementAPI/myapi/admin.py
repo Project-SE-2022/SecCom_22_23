@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cameras,Properties,Alarms
+# from .models import Cameras,Properties,Alarms
 
 # Register your models here.
 """
