@@ -26,7 +26,7 @@ Should run on port 8050
 
 To access administrator go on port 8050/admin with the following credentials:
 
-usernaem: smapiAdmin
+username: smapiAdmin
 
 password: smapi12345
 
