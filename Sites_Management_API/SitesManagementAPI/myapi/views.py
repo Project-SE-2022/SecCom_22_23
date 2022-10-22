@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from rest_framework.views import APIView
 import json
-from .serializers import OwnerSerializer
-from .models import Owner
+from .serializers import OwnerSerializer, PropertySerializer
+from .models import Owner, Property
 
 
 class OwnerView(APIView):
@@ -27,6 +27,30 @@ class OwnerView(APIView):
         msg = f"update request to owner with id {id}"
         print(msg)
         print(owners)
+        return HttpResponse(msg)
+
+class PropertyView(APIView):
+
+    def put(self, request):
+        data = json.loads(request.data)
+        serializer = PropertySerializer(data=data)
+        if serializer.is_valid():
+            instance = serializer.save()
+            msg = f"Property was created with id: {instance.id}"
+            print(msg)
+            return HttpResponse(msg)
+        else:
+            msg = f"Invalid data! {data}, {serializer.errors}"
+            print(msg)
+            return HttpResponse(msg)
+
+    def post(self, request):
+        data = json.loads(request.data)
+        id = data['id']
+        properties = Property.objects.filter(id=id)
+        msg = f"update request to property with id {id}"
+        print(msg)
+        print(properties)
         return HttpResponse(msg)
 
 
