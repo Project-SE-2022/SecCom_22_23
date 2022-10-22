@@ -6,7 +6,7 @@ class OwnerManager(models.Manager):
 
     def create_owner(self, email, password, name, created=None):
         created = created or datetime.now()
-        return Owner(email, password, name, created)
+        return Owner(email=email, password=password, name=name, created=created)
 
 
 class Owner(models.Model):
@@ -16,6 +16,9 @@ class Owner(models.Model):
     created = models.DateTimeField()
 
     objects = OwnerManager()
+
+    def __str__(self):
+        return f"Owner:{{id: {self.id}, email: {self.email}, name: {self.name}, created: {self.created}}}"
 
 
 class Property(models.Model):

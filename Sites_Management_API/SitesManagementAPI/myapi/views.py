@@ -12,6 +12,7 @@ class OwnerView(APIView):
         serializer = OwnerSerializer(data=data)
         if serializer.is_valid():
             instance = serializer.save()
+            print(instance)
             msg = f"Owner was created with id: {instance.id}"
             print(msg)
             return HttpResponse(msg)

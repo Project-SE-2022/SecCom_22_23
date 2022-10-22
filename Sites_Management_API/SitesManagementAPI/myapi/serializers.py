@@ -10,18 +10,18 @@ class OwnerSerializer(serializers.ModelSerializer):
         fields = ("email", "password", "name")
 
     def create(self, validated_data):
-        return Owner.objects.create_owner(
-            validated_data['email'],
-            validated_data['password'],
-            validated_data['name'],
-            validated_data.get('created', datetime.now())
+        owner = Owner.objects.create_owner(
+            email=validated_data['email'],
+            password=validated_data['password'],
+            name=validated_data['name'],
         )
+        owner.save()
+        return owner
 
     def update(self, instance, validated_data):
         instance.email = validated_data.get('email', instance.email)
         instance.password = validated_data.get('password', instance.password)
         instance.name = validated_data.get('name', instance.name)
-        instance.created = validated_data.get('created', instance.created)
         instance.save()
         return instance
 
