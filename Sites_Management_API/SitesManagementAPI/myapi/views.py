@@ -1,7 +1,25 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from rest_framework.views import APIView
+import json
+from .serializers import OwnerSerializer
 
-# Create your views here.
+
+class OwnerView(APIView):
+
+    def put(self, request):
+        data = json.loads(request.data)
+        serializer = OwnerSerializer(data=data)
+        if serializer.is_valid():
+            instance = serializer.save()
+            msg = f"Owner was created with id: {instance.id}"
+            print(msg)
+            return HttpResponse(msg)
+        else:
+            msg = f"Invalid data! {data}, {serializer.errors}"
+            print(msg)
+            return HttpResponse(msg)
+
 
 # Get all properties
 def getProperty(request):
