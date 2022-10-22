@@ -2,14 +2,20 @@ from django.db import models
 from datetime import datetime
 
 
-class Owner(models.Model):
+class OwnerManager(models.Manager):
 
-    def __init__(self, email, password, name, created=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.email = email
-        self.password = password
-        self.name = name
-        self.created = created or datetime.now()
+    def create_owner(self, email, password, name, created=None):
+        created = created or datetime.now()
+        return Owner(email, password, name, created)
+
+
+class Owner(models.Model):
+    email = models.EmailField()
+    password = models.CharField(max_length=50)
+    name = models.CharField(max_length=200)
+    created = models.DateTimeField()
+
+    objects = OwnerManager()
 
 
 class Property(models.Model):

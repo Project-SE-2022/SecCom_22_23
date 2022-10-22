@@ -1,8 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render
 from rest_framework.views import APIView
 import json
 from .serializers import OwnerSerializer
+from .models import Owner
 
 
 class OwnerView(APIView):
@@ -19,6 +19,16 @@ class OwnerView(APIView):
             msg = f"Invalid data! {data}, {serializer.errors}"
             print(msg)
             return HttpResponse(msg)
+
+    def post(self, request):
+        data = json.loads(request.data)
+        id = data['id']
+        owners = Owner.objects.filter(id=id)
+        msg = f"update request to owner with id {id}"
+        print(msg)
+        print(owners)
+        return HttpResponse(msg)
+
 
 
 # Get all properties
