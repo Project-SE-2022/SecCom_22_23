@@ -40,6 +40,18 @@ python3 manage.py makemigrations myapi
 python3 manage.py migrate myapi
 ```
 
+4. Create `auth_users` table.
+```
+./manage.py migrate
+```
+To create the admin user
+```
+./python manage.py createsuperuser
+```
+**Username:** smapiAdmin
+<br>
+**password:** smapi12345 
+
 ## Run Django API via docker
 
 1. Run the API docker image (127.0.0.1).
@@ -51,3 +63,4 @@ docker-compose up
 ```bash
 docker-compose build
 ```
+
