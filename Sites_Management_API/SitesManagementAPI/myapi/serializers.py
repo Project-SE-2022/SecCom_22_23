@@ -1,7 +1,6 @@
 from datetime import datetime
 from rest_framework import serializers
 from .models import Owner
-# This file is used to convert the models into json
 
 
 class OwnerSerializer(serializers.ModelSerializer):
@@ -10,13 +9,11 @@ class OwnerSerializer(serializers.ModelSerializer):
         fields = ("email", "password", "name")
 
     def create(self, validated_data):
-        owner = Owner.objects.create_owner(
+        return Owner.objects.create_owner(
             email=validated_data['email'],
             password=validated_data['password'],
             name=validated_data['name'],
         )
-        owner.save()
-        return owner
 
     def update(self, instance, validated_data):
         instance.email = validated_data.get('email', instance.email)

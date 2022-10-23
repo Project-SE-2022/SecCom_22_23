@@ -12,7 +12,6 @@ class OwnerView(APIView):
         serializer = OwnerSerializer(data=data)
         if serializer.is_valid():
             instance = serializer.save()
-            print(instance)
             msg = f"Owner was created with id: {instance.id}"
             print(msg)
             return HttpResponse(msg)
@@ -23,12 +22,17 @@ class OwnerView(APIView):
 
     def post(self, request):
         data = json.loads(request.data)
-        id = data['id']
-        owners = Owner.objects.filter(id=id)
-        msg = f"update request to owner with id {id}"
-        print(msg)
-        print(owners)
-        return HttpResponse(msg)
+        owner = Owner.objects.filter(id=data['id'])[0]
+        serializer = OwnerSerializer(owner, data=data)
+        if serializer.is_valid():
+            owner = serializer.save()
+            msg = f"update request to owner with id {owner.id}"
+            print(msg)
+            return HttpResponse(msg)
+        else:
+            msg = f"Invalid data! {data}, {serializer.errors}"
+            print(msg)
+            return HttpResponse(msg)
 
 
 

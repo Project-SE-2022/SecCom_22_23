@@ -6,7 +6,9 @@ class OwnerManager(models.Manager):
 
     def create_owner(self, email, password, name, created=None):
         created = created or datetime.now()
-        return Owner(email=email, password=password, name=name, created=created)
+        owner = Owner(email=email, password=password, name=name, created=created)
+        owner.save()
+        return owner
 
 
 class Owner(models.Model):
