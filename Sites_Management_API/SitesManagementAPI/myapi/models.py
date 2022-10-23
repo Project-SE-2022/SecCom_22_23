@@ -1,47 +1,31 @@
 from django.db import models
-from datetime import datetime
-
-
-class OwnerManager(models.Manager):
-
-    def create_owner(self, email, password, name, created=None):
-        created = created or datetime.now()
-        return Owner(email, password, name, created)
-
-
-class Owner(models.Model):
-    email = models.EmailField()
-    password = models.CharField(max_length=50)
-    name = models.CharField(max_length=200)
-    created = models.DateTimeField()
-
-    objects = OwnerManager()
-
-
-class PropertyManager(models.Manager):
-
-    def create_property(self, owner, designation, created=None):
-        created = created or datetime.now()
-        return Property(owner,designation, created)
-
 
 class Property(models.Model):
-    id = models.AutoField(primary_key=True)
-    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
-    designation = models.CharField(max_length=200)
-    created = models.DateTimeField()
+    name = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
 
-    objects = PropertyManager()
+    def __str__(self):
+        return self.name
 
+class Camera(models.Model):
+    property_id = models.ForeignKey(Property, db_column="property_id", null="False", on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    ip = models.CharField(max_length=50)
+    created = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
 
-"""
-class Alarms(models.Model):
-    pass
+class Alarm(models.Model):
+    SOUND = 'Sound'
+    LIGHT = 'Light'
+    alarm_types = [ (SOUND,'Sound'), (LIGHT,'Light') ]
 
-class Properties(models.Model):
-    pass
-
-class Cameras(models.Model):
-    pass
-"""
+    property_id = models.ForeignKey(Property, db_column="property_id", null="False", on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    # type = models.CharField(max_length=200)
+    type = models.CharField(max_length=5, choices=alarm_types)
+    created = models.DateTimeField(auto_now_add=True)
+   
+    def __str__(self):
+        return self.name

@@ -2,16 +2,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('owner/', views.OwnerView.as_view()),
-    path('property/', views.PropertyView.as_view()),
-    # path('property/<int:id>/', getPropertyById),
-    #
-    # path('owner/', getOwner),
-    # path('owner/<int:id>/', getOwnerById),
-    #
-    # path('camera/', getCamera),
-    # path('camera/<int:id>/', getCameraById),
-    #
-    # path('alarm/', getAlarm),
-    # path('alarm/<int:id>/', getAlarmById),
+    # Cameras URLs
+    path('cameras/', views.CameraList.as_view()),
+    path('camera/<int:pk>', views.CameraDetail.as_view()),
+
+    # Properties URLs
+    path('properties/', views.PropertyList.as_view()),
+    path('property/<int:pk>', views.PropertyDetail.as_view()),
+
+    # Alarms URLs
+    path('alarms/', views.AlarmList.as_view()),
+    path('alarm/<int:pk>', views.AlarmDetail.as_view())
 ]

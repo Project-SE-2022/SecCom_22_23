@@ -1,102 +1,48 @@
-from django.http import HttpResponse
-from rest_framework.views import APIView
-import json
-from .serializers import OwnerSerializer, PropertySerializer
-from .models import Owner, Property
+from rest_framework import generics
+from .serializers import CameraSerializer, PropertySerializer, AlarmSerializer
+from .models import Camera, Property, Alarm
 
+# Cameras ------------------------------------------------------------------------------------ 
+class CameraList(generics.ListCreateAPIView):
+    serializer_class = CameraSerializer
 
-class OwnerView(APIView):
+    def get_queryset(self):
+        queryset = Camera.objects.all()
+        #property = self.request.query_params.get('property')
+        #if property is not None:
+        #    queryset = queryset.filter(property=property)
+        return queryset
 
-    def put(self, request):
-        data = json.loads(request.data)
-        serializer = OwnerSerializer(data=data)
-        if serializer.is_valid():
-            instance = serializer.save()
-            msg = f"Owner was created with id: {instance.id}"
-            print(msg)
-            return HttpResponse(msg)
-        else:
-            msg = f"Invalid data! {data}, {serializer.errors}"
-            print(msg)
-            return HttpResponse(msg)
+class CameraDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CameraSerializer
+    queryset = Camera.objects.all()
 
-    def post(self, request):
-        data = json.loads(request.data)
-        id = data['id']
-        owners = Owner.objects.filter(id=id)
-        msg = f"update request to owner with id {id}"
-        print(msg)
-        print(owners)
-        return HttpResponse(msg)
+# Properties ------------------------------------------------------------------------------------
+class PropertyList(generics.ListCreateAPIView):
+    serializer_class = PropertySerializer
 
-class PropertyView(APIView):
+    def get_queryset(self):
+        queryset = Property.objects.all()
+        #property = self.request.query_params.get('property')
+        #if property is not None:
+        #    queryset = queryset.filter(property=property)
+        return queryset
 
-    def put(self, request):
-        data = json.loads(request.data)
-        serializer = PropertySerializer(data=data)
-        if serializer.is_valid():
-            instance = serializer.save()
-            msg = f"Property was created with id: {instance.id}"
-            print(msg)
-            return HttpResponse(msg)
-        else:
-            msg = f"Invalid data! {data}, {serializer.errors}"
-            print(msg)
-            return HttpResponse(msg)
+class PropertyDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = PropertySerializer
+    queryset = Property.objects.all()
 
-    def post(self, request):
-        data = json.loads(request.data)
-        id = data['id']
-        properties = Property.objects.filter(id=id)
-        msg = f"update request to property with id {id}"
-        print(msg)
-        print(properties)
-        return HttpResponse(msg)
+# Alarms ------------------------------------------------------------------------------------
+class AlarmList(generics.ListCreateAPIView):
+    serializer_class = AlarmSerializer
 
+    def get_queryset(self):
+        queryset = Alarm.objects.all()
+        #property = self.request.query_params.get('property')
+        #if property is not None:
+        #    queryset = queryset.filter(property=property)
+        return queryset
 
-
-# Get all properties
-def getProperty(request):
-    message = f'ALL properties'
-    return HttpResponse(message)
-
-# Get property by Id
-def getPropertyById(request,id=None):
-    message = f'Property {id}'
-    return HttpResponse(message)
-
-
-
-# Get all owners
-def getOwner(request):
-    message = f'ALL owners'
-    return HttpResponse(message)
-
-# Get owner by Id
-def getOwnerById(request,id=None):
-    message = f'Owner {id}'
-    return HttpResponse(message)
-
-
-
-# Get all cameras
-def getCamera(request):
-    message = f'ALL cameras'
-    return HttpResponse(message)
-
-# Get camera by Id
-def getCameraById(request,id=None):
-    message = f'Camera {id}'
-    return HttpResponse(message)
-
-
-
-# Get all alarms
-def getAlarm(request):
-    message = f'ALL alarms'
-    return HttpResponse(message)
-
-# Get alarm by Id
-def getAlarmById(request,id=None):
-    message = f'Alarm {id}'
-    return HttpResponse(message)
+class AlarmDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = AlarmSerializer
+    queryset = Alarm.objects.all()
