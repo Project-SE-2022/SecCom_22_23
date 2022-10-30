@@ -1,0 +1,13 @@
+table {
+    border: 2px solid #b7b7b7;
+    /* wid */
+}
+
+thead {
+    background-color: #ededed;
+    padding-left: 10px;
+}
+
+.icon:hover {
+    cursor: pointer;
+}

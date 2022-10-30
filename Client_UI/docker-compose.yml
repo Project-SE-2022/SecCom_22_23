@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  intrusion_management_api:
+    container_name: imapi
+    build:
+      context: ./imapi
+    env_file:
+      - ./imapi/.env
+    ports:
+      - "8060:8060"
+    volumes:
+      - ./imapi:/imapi
+
+  clients_ui:
+    container_name: clients_ui
+    build:
+      context: ./ui
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ui/src:/ui/src

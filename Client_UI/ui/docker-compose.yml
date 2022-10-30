@@ -38,6 +38,14 @@ services:
         ports:
             - "8080:8080"
         restart: unless-stopped
+        # volumes:
+        #     - ./keycloak/realms/import:/tmp/import
+        # command:
+        #     - "-Dkeycloak.migration.action=import"
+        #     - "-Dkeycloak.migration.provider=dir"
+        #     - "-Dkeycloak.migration.dir=/tmp/import"
+        volumes:
+            - ./keycloak/realms/export:/tmp/export
         networks:
             - keycloak_net
 
