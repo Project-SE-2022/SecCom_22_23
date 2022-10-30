@@ -14,7 +14,7 @@ sudo apt install docker docker.io docker-compose
 2. Build the API docker image.
 
 ```bash
-docker build -t clients_ui .
+docker build -t clients_ui:dev .
 sudo docker images
 ```
 
@@ -27,19 +27,5 @@ sudo docker-compose up
 
 2. Build the docker image every time it changes.
 ```bash
-docker build -t clients_ui .
-docker-compose down -v
-docker-compose build
-```
-
-## Keycloak Database
-
-1. Connect to the database via bash.
-```bash
-sudo docker exec -it seccom_postgres_1 bash
-```
-
-2. Enter the postgresql cli.
-```bash
-psql -U keycloak -W
+docker build -t clients_ui:dev .
 ```
