@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  title: SecCom - OpenAPI 3.0
+  description: |-
+    This is a security Platform that detects 
+
+    _If you're looking for the Swagger 2.0/OAS 2.0 version of Petstore, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_
+    
+    Some useful links:
+    - [The Platform repository](https://github.com/orgs/Project-SE-2022)
+    - [The source API definition for the SecCom application](https://github.com/Project-SE-2022/SecCom_22_23/openapi.yaml)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+servers:
+  - url: https://petstore3.swagger.io/api/v1
+tags:
+  - name: intrusion
+    description: Everything about intrusions
+  - name: property
+    description: Everything about properties
+  - name: camera
+    description: Everything about cameras
+  - name: alarm
+    description: Everything about alarms
+paths:
+  /IntrusionManagementAPI/intrusions/:
+    get:
+      tags:
+        - intrusion
+      summary: Get a list of intrusions
+      description: Get a list of all the intrusions
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Intrusion'
+  /SitesManagementAPI/cameras:
+    get:
+      tags:
+        - camera
+      summary: Get a list of existing cameras
+      description: Get a list of existing cameras
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Camera'
+  /SitesManagementAPI/properties:
+    get:
+      tags:
+        - camera
+      summary: Get a list of existing properties
+      description: Get a list of existing properties
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Property'
+
+
+
+
+
+
+
+
+
+components:
+  schemas:
+    Property:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1345
+        name:
+          type: string
+    Camera:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 2345
+        name:
+          type: string
+        property:
+          $ref: '#/components/schemas/Property'
+    Intrusion:
+      type: object
+      properties:
+        camera:
+          $ref: '#/components/schemas/Camera'
