@@ -5,6 +5,8 @@
 # @Last Modified by:   Rafael Direito
 # @Last Modified time: 2022-10-07 11:42:57
 
+
+import requests
 import numpy as np
 import cv2
 import sys
@@ -14,6 +16,16 @@ import datetime
 import os
 import glob
 import redis
+
+
+def sendToIntrusionAPI(cam_id, intrusion_timestamp ):
+    payload = {
+     "camera_id": cam_id,
+     "intrusion_timestamp": intrusion_timestamp
+    }
+    #POST
+    r = requests.post('http://127.0.0.1:8060/IntrusionManagementAPI/intrusions/', json=payload)
+    print(r.text)
 
 
 # Kombu Message Consuming Human_Detection_Worker
@@ -138,6 +150,11 @@ class Human_Detection_Worker(ConsumerMixin):
         if prev1_frame_n_humans + curr_frame_n_humans + prev2_frame_n_humans >= 3:
             timestamp_key = f"camera_{camera_id}_frame_{frame_id}_timestamp"
             timestamp = self.database.get(timestamp_key, "")
+            #Get id number "camera_id" string and send it to intrusion api
+            cam_id = str(camera_id)
+            cam_id = cam_id.split('_')
+            cam_id = cam_id[1]
+            sendToIntrusionAPI(int(cam_id),str(timestamp))
             print(f"[!!!] INTRUDER DETECTED AT TIMESTAMP {timestamp}[!!!]")
             return True
         return False

@@ -9,4 +9,7 @@ services:
       - "8050:8050"
     image: django:sites_management_api
     container_name: sites_management_api_container
+    command: rm db.sqlite3    
+    command: python manage.py makemigrations myapi
+    command: python manage.py migrate myapi
     command: python manage.py runserver 0.0.0.0:8050
