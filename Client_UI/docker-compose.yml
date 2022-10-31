@@ -47,6 +47,10 @@ services:
     ports:
         - "8080:8080"
     restart: unless-stopped
+    volumes:
+      - ./keycloak/realms/export:/tmp/export
+    command: 
+      - "-b 0.0.0.0 -Dkeycloak.import=/tmp/export/Clients_UI-realm.json"
     networks:
       - keycloak_net
 
