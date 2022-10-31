@@ -85,35 +85,37 @@ class App extends Component {
 						</Col>
 						<Col style={{ textAlign: 'left', marginTop: '2%' }}>
 							<h5>Camera intrusion history</h5>
-							<Row style={{ textAlign: 'left', marginTop: '4%', marginLeft: '0.4%', marginRight: '0.4%'}}>
-								<table>
-									<thead>
-										<tr>
-											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '6.5%' }}>Camera</th>
-											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Date</th>
-											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Video Clip</th>
-										</tr>
-									</thead>
-									<tbody>
-										{data.length ?
-											data.map(camera => (
-												<tr key={camera.id}>
-													<td style={{paddingLeft:'6.5%'}} >{camera.camera_id}</td>
-													<td style={{paddingLeft:'7%'}} >{camera.intrusion_timestamp}</td>
-													<td className="icon" style={{paddingLeft:'7%'}} > <GrDownload /> </td>
-												</tr>
-											))
-											:
-											(
-												<tr>
-													<td style={{paddingLeft:'6.5%'}} >------------</td>
-													<td style={{paddingLeft:'7%'}} >-------</td>
-													<td style={{paddingLeft:'7%'}} >---</td>
-												</tr>
-											)
-										}
-									</tbody>
-								</table>
+							<Row style={{ textAlign: 'left', marginTop: '4%', marginLeft: '0.4%', marginRight: '0.4%' }}>
+								<div id="table_container">
+									<table>
+										<thead>
+											<tr>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '6.5%' }}>Camera</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Date</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingRight: '7%' }}>Video Clip</th>
+											</tr>
+										</thead>
+										<tbody>
+											{data.length ?
+												data.map(camera => (
+													<tr key={camera.id}>
+														<td style={{ paddingLeft: '6.5%' }} >{camera.camera_id}</td>
+														<td style={{ paddingLeft: '7%' }} >{camera.intrusion_timestamp}</td>
+														<td className="icon" style={{ paddingRight: '7%' }} > <GrDownload /> </td>
+													</tr>
+												))
+												:
+												(
+													<tr>
+														<td style={{ paddingLeft: '6.5%' }} >------------</td>
+														<td style={{ paddingLeft: '7%' }} >-------</td>
+														<td style={{ paddingLeft: '7%' }} >---</td>
+													</tr>
+												)
+											}
+										</tbody>
+									</table>
+								</div>
 							</Row>
 							<Row style={{ textAlign: 'center', marginTop: '10%' }}>
 								<p>Row 2</p>

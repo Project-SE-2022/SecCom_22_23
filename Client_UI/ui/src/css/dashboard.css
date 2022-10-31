@@ -1,13 +1,32 @@
 table {
-    border: 2px solid #b7b7b7;
-    /* wid */
+    /* border: 2px solid #b7b7b7; */
+    height: 300px;
+    width: 100%;
+    overflow: auto;
 }
 
 thead {
     background-color: #ededed;
     padding-left: 10px;
+    position: sticky;   
+    top: 0px;
+    width: 100%;
 }
 
 .icon:hover {
     cursor: pointer;
+}
+
+#table_container{
+    border: 2px solid #b7b7b7;
+    height: 350px;
+    width: 100%;
+    overflow: auto;
+    padding-left: 0px;
+    margin-right: 0px;
+    padding-right: 0px;
+}
+
+tr {
+    width: 100%;
 }
