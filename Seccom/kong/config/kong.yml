@@ -1,0 +1,64 @@
+ _format_version: "3.0"
+ _transform: true
+
+ services:
+ - host: mockbin.org
+   name: example_service
+   port: 80
+   protocol: http
+   routes:
+   - name: example_route
+     paths:
+     - /mock
+     strip_path: true
+
+ - name: gist-service                                                         
+   url: https://api.github.com/                                                
+   routes:                                                                     
+   - name: gists-route                                                     
+     paths:                                                                
+     - /gists
+
+ - name: github
+   url: https://github.com/rafael-direito/es_gap_2022_helpers                                               
+   routes:                                                                     
+   - name: github-route                                                     
+     paths:                                                                
+     - /gh
+  
+ - name: keycloak 
+   url: http://keycloak:8080
+   routes:
+   - name: key
+     paths:
+     - /key
+
+ - name: rabbit 
+   url: http://rabbitmq:15672
+   routes:
+   - name: rabbitmq
+     paths:
+     - /rb
+
+ - name: imapi
+   url: http://imapi:8060
+   routes:
+   - name: intro
+     paths:
+     - /intro
+
+ - name: client-ui
+   url: http://client:3000
+   routes:
+   - name: client-ui
+     paths:
+     - /client
+
+
+ - name: client-ui
+   url: http://smapi:8050
+   routes:
+   - name: site-management-api
+     paths:
+     - /management
+
