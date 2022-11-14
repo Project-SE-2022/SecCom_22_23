@@ -12,13 +12,15 @@ class App extends Component {
 		super(props)
 
 		this.state = {
-			data: []
+			cameraData: [],
+			alarmData: []
 		}
 	}
 
 	// Intrusion table updated every second (1000ms)
 	componentDidMount() {
 		this.interval = setInterval(() => this.getIntrusions({ time: Date.now() }), 1000);
+		this.interval = setInterval(() => this.getAlarms({ time: Date.now() }), 1000);
 	}
 
 	componentWillUnmount() {
@@ -30,14 +32,25 @@ class App extends Component {
 			.get("http://localhost:8060/IntrusionManagementAPI/intrusions/")
 			.then((resp) => {
 				this.setState({
-					data: resp.data
+					cameraData: resp.data
+				})
+			})
+			.catch((err) => console.log(err));
+	}
+
+	getAlarms = () => {
+		axios
+			.get("http://localhost:8050/SitesManagementAPI/alarms/")
+			.then((resp) => {
+				this.setState({
+					alarmData: resp.data
 				})
 			})
 			.catch((err) => console.log(err));
 	}
 
 	render() {
-		const { data = [] } = this.state
+		const { cameraData = [], alarmData = [] } = this.state
 
 		return (
 			<main className="Container">
@@ -96,8 +109,8 @@ class App extends Component {
 											</tr>
 										</thead>
 										<tbody>
-											{data.length ?
-												data.map(camera => (
+											{cameraData.length ?
+												cameraData.map(camera => (
 													<tr key={camera.id}>
 														<td style={{ paddingLeft: '6.5%' }} >{camera.camera_id}</td>
 														<td style={{ paddingLeft: '7%' }} >{camera.intrusion_timestamp}</td>
@@ -117,8 +130,38 @@ class App extends Component {
 									</table>
 								</div>
 							</Row>
-							<Row style={{ textAlign: 'center', marginTop: '10%' }}>
-								<p>Row 2</p>
+							<Row style={{ textAlign: 'left', marginTop: '10%' }}>
+								<h5>Alarms intrusion history</h5>
+								<div id="table_container">
+									<table>
+										<thead>
+											<tr>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '6.5%' }}>Alarm</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Type</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Property ID</th>
+											</tr>
+										</thead>
+										<tbody>
+											{alarmData.length ?
+												alarmData.map(alarm => (
+													<tr key={alarm.id}>
+														<td style={{ paddingLeft: '6.5%' }} >{alarm.name}</td>
+														<td style={{ paddingLeft: '7%' }} >{alarm.type}</td>
+														<td style={{ paddingLeft: '7%' }} >{alarm.property_id}</td>
+													</tr>
+												))
+												:
+												(
+													<tr>
+														<td style={{ paddingLeft: '6.5%' }} >------------</td>
+														<td style={{ paddingLeft: '7%' }} >-------</td>
+														<td style={{ paddingLeft: '7%' }} >---</td>
+													</tr>
+												)
+											}
+										</tbody>
+									</table>
+								</div>
 							</Row>
 						</Col>
 						<Col style={{ paddingRight: '4%', textAlign: 'center' }}>
