@@ -6,6 +6,9 @@ import Col from 'react-bootstrap/Col';
 import axios from "axios";
 import './css/dashboard.css';
 import { GrDownload } from 'react-icons/gr';
+import { GrSettingsOption } from 'react-icons/gr';
+
+import Switch from '@mui/material/Switch';
 
 class App extends Component {
 	constructor(props) {
@@ -92,13 +95,49 @@ class App extends Component {
 							<Row style={{ textAlign: 'center' }}>
 								<p>Row 1</p>
 							</Row>
-							<Row style={{ textAlign: 'center' }}>
-								<p>Row 2</p>
+							<Row style={{ textAlign: 'left', marginTop: '10%', marginLeft: '0.4%', marginRight: '0.4%' }}>
+								<h5>Alarms</h5>
+								<div id="table_container">
+									<table>
+										<thead>
+											<tr>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Alarm</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Type</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Off/On</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Configure</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingRight: '2%' }}>Data</th>
+											</tr>
+										</thead>
+										<tbody>
+											{alarmData.length ?
+												alarmData.map(alarm => (
+													<tr key={alarm.id}>
+														<td style={{ paddingLeft: '2%' }} >{alarm.name}</td>
+														<td style={{ paddingLeft: '2%' }} >{alarm.type}</td>
+														<td style={{ paddingLeft: '2%' }} ><Switch inputProps={{ 'aria-label': 'controlled' }}/></td>
+														<td className="icon" style={{ paddingLeft: '6%' }} > <GrSettingsOption /> </td>
+														<td className="icon" style={{ paddingLeft: '2%' }} > <GrDownload /> </td>
+													</tr>
+												))
+												:
+												(
+													<tr>
+														<td style={{ paddingLeft: '2%' }} >------------</td>
+														<td style={{ paddingLeft: '2%' }} >-------</td>
+														<td style={{ paddingLeft: '2%' }} >---</td>
+														<td style={{ paddingLeft: '2%' }} >---</td>
+														<td style={{ paddingRight: '2%' }} >---</td>
+													</tr>
+												)
+											}
+										</tbody>
+									</table>
+								</div>
 							</Row>
 						</Col>
 						<Col style={{ textAlign: 'left', marginTop: '2%' }}>
-							<h5>Camera intrusion history</h5>
 							<Row style={{ textAlign: 'left', marginTop: '4%', marginLeft: '0.4%', marginRight: '0.4%' }}>
+								<h5>Camera intrusion history</h5>
 								<div id="table_container">
 									<table>
 										<thead>
@@ -130,7 +169,7 @@ class App extends Component {
 									</table>
 								</div>
 							</Row>
-							<Row style={{ textAlign: 'left', marginTop: '10%' }}>
+							<Row style={{ textAlign: 'left', marginTop: '10%', marginLeft: '0.4%', marginRight: '0.4%' }}>
 								<h5>Alarms intrusion history</h5>
 								<div id="table_container">
 									<table>
@@ -164,13 +203,30 @@ class App extends Component {
 								</div>
 							</Row>
 						</Col>
-						<Col style={{ paddingRight: '4%', textAlign: 'center' }}>
-							Column 3
-							<Row style={{ textAlign: 'center' }}>
-								<p>Row 1</p>
+						<Col style={{textAlign: 'center', marginTop: '2%', paddingRight:'4%'}}>
+							<Row style={{ textAlign: 'left', marginTop: '4%', marginLeft: '0.4%', marginRight: '0.4%' }}>
+								<h5>Manage notifications</h5>
+								<div id="table_container" style={{maxHeight: '110px'}}>
+									<table style={{maxHeight: '100px'}}>
+										<tbody>
+											<tr>
+												<td style={{ paddingLeft: '5%' }}><input type="checkbox" /></td>
+												<td style={{ paddingLeft: '5%' }}>Receive notifications via sms</td>
+											</tr>
+											<tr>
+												<td style={{ paddingLeft: '5%' }}><input type="checkbox" /></td>
+												<td style={{ paddingLeft: '5%' }}>Receive notifications via email</td>
+											</tr>
+											<tr>
+												<td style={{ paddingLeft: '5%' }}><input type="checkbox" /></td>
+												<td style={{ paddingLeft: '5%' }}>Receive notifications via phone call</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</Row>
-							<Row style={{ textAlign: 'center' }}>
-								<p>Row 2</p>
+							<Row style={{ textAlign: 'left', marginTop: '10%', marginLeft: '0.4%', marginRight: '0.4%' }}>
+								<h5>Statistics</h5>
 							</Row>
 						</Col>
 					</Row>
