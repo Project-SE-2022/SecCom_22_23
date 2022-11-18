@@ -25,24 +25,13 @@ docker-compose build
 
 ## Export keycloak realm
 
-1. Run the following command to export the Clients_UI realm.
+1. Run the following command to export the Seccom realm.
 ```bash
 docker exec -it keycloak /opt/jboss/keycloak/bin/standalone.sh \
 -Djboss.socket.binding.port-offset=100 \
 -Dkeycloak.migration.action=export \
 -Dkeycloak.migration.provider=singleFile \
--Dkeycloak.migration.realmName=Clients_UI \
+-Dkeycloak.migration.realmName=Seccom \
 -Dkeycloak.migration.usersExportStrategy=REALM_FILE \
--Dkeycloak.migration.file=/tmp/export/Clients_UI-realm.json
-```
-
-2. Run the following command to export the Management_UI realm.
-```bash
-docker exec -it keycloak /opt/jboss/keycloak/bin/standalone.sh \
--Djboss.socket.binding.port-offset=100 \
--Dkeycloak.migration.action=export \
--Dkeycloak.migration.provider=singleFile \
--Dkeycloak.migration.realmName=Management_UI \
--Dkeycloak.migration.usersExportStrategy=REALM_FILE \
--Dkeycloak.migration.file=/tmp/export/Management_UI-realm.json
+-Dkeycloak.migration.file=/tmp/export/Seccom-realm.json
 ```

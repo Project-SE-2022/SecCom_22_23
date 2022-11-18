@@ -6,8 +6,8 @@ import Keycloak from 'keycloak-js';
 
 let initOptions = {
 	"url": "http://localhost:8080/auth/",
-	"realm": "Management_UI",
-	"clientId": "management_ui",
+	"realm": "Seccom",
+	"clientId": "mgmt_ui",
 	"onLoad": 'login-required'	
 }
 
