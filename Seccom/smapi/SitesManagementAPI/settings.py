@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # other dependencies
     'rest_framework',
     # 'corsheaders',
+    'requests',
 ]
 
 MIDDLEWARE = [

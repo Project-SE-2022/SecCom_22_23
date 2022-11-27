@@ -24,6 +24,8 @@ services:
       - "8050:8050"
     volumes:
       - ./smapi:/smapi
+    networks:
+      - keycloak_net
 
   clients_ui:
     hostname: "client"

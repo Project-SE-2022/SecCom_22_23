@@ -3,6 +3,18 @@ from rest_framework import serializers
 from .models import *
 # This file is used to convert the models into json
 
+class ClientSerializer(serializers.Serializer):
+    username = serializers.CharField(label="username")
+    firstname = serializers.CharField(label="firstname")
+    lastname = serializers.CharField(label="lastname")
+    email = serializers.CharField(label="email")
+
+class ClientDetailSerializer(serializers.Serializer):
+    username = serializers.CharField(label="username",initial="")
+    firstname = serializers.CharField(label="firstname",initial="")
+    lastname = serializers.CharField(label="lastname",initial="")
+    email = serializers.CharField(label="email",initial="")
+
 class CameraSerializer(serializers.ModelSerializer):
     class Meta:
         model = Camera

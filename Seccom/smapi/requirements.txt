@@ -1,6 +1,9 @@
 asgiref==3.5.2
 django==4.1.2
 django-rest-framework==0.1.0
+django-keycloak==0.1.1
+python-keycloak-client==0.2.3
 pytz==2021.1
 sqlparse==0.4.3
 django-cors-headers==3.13.0
+requests==2.25.1
