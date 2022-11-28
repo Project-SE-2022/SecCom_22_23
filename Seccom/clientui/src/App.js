@@ -52,6 +52,14 @@ class App extends Component {
 			.catch((err) => console.log(err));
 	}
 
+	download_video = () => {
+		axios
+			.get("http://localhost:8060/IntrusionManagementAPI/intrusion/video")
+			.then((resp) => {
+				window.open(resp.data["url"]);
+			})
+			.catch((err) => console.log(err));
+	}
 	render() {
 		const { cameraData = [], alarmData = [] } = this.state
 
@@ -144,7 +152,7 @@ class App extends Component {
 											<tr>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '6.5%' }}>Camera</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Date</th>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingRight: '7%' }}>Video Clip</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingRight: '7%' }} >Video Clip</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -153,7 +161,7 @@ class App extends Component {
 													<tr key={camera.id}>
 														<td style={{ paddingLeft: '6.5%' }} >{camera.camera_id}</td>
 														<td style={{ paddingLeft: '7%' }} >{camera.intrusion_timestamp}</td>
-														<td className="icon" style={{ paddingRight: '7%' }} > <GrDownload /> </td>
+														<td className="icon" style={{ paddingRight: '7%' }} onClick={this.download_video}> <GrDownload /> </td>
 													</tr>
 												))
 												:
