@@ -4,16 +4,16 @@ from .models import *
 # This file is used to convert the models into json
 
 class ClientSerializer(serializers.Serializer):
-    username = serializers.CharField(label="username")
-    firstname = serializers.CharField(label="firstname")
-    lastname = serializers.CharField(label="lastname")
-    email = serializers.CharField(label="email")
+    username = serializers.CharField(label="Username")
+    firstname = serializers.CharField(label="Firstname")
+    lastname = serializers.CharField(label="Lastname")
+    email = serializers.CharField(label="Email")
 
 class ClientDetailSerializer(serializers.Serializer):
-    username = serializers.CharField(label="username",initial="")
-    firstname = serializers.CharField(label="firstname",initial="")
-    lastname = serializers.CharField(label="lastname",initial="")
-    email = serializers.CharField(label="email",initial="")
+    username = serializers.CharField(label="Username",initial="")
+    firstname = serializers.CharField(label="Firstname",initial="")
+    lastname = serializers.CharField(label="Lastname",initial="")
+    email = serializers.CharField(label="Email",initial="")
 
 class CameraSerializer(serializers.ModelSerializer):
     class Meta:
