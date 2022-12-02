@@ -2,9 +2,12 @@ from django.shortcuts import HttpResponseRedirect
 from rest_framework import generics
 from .models import Intrusion
 
-from .serializers import IntrusionSerializer
+from .serializers import IntrusionSerializer, VideoSerializer
 
 from rest_framework.views import APIView
+
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 import boto3
 #from botocore import UNSIGNED
@@ -50,13 +53,22 @@ class IntrusionVideo(APIView):
                     'Key': upload_file_key
                 }
             )
-
-
-            #return HttpResponseRedirect(url)
-            print("------")
-            print(url)
-            print("-------")
             return Response(data={"url": str(url)})
         except:
             return Response(data={"url": "Error Video"})
+    
+    def post(self, request):
+        fileVideo = request.FILES['upload_file']
+        path = default_storage.save('./myapi/videos/video.avi', ContentFile(fileVideo.read()))
+        try:
+            client = boto3.resource('s3',aws_access_key_id = 'AKIAV3ZBHOANRIWJ6EUL',
+                                aws_secret_access_key = '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')
+                
+            upload_file_bucket = 'seccombucket'
+            upload_file_key = './myapi/videos/video.avi'
+            client.meta.client.upload_file(upload_file_key, upload_file_bucket, 'intrusions/' + str(fileVideo))
+            path = default_storage.delete('./myapi/videos/video.mp4')
+            return Response(status=200)
+        except:
+            return Response(status=400)
 

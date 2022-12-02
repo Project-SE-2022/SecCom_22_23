@@ -54,8 +54,13 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000'
+# Added CORS to the API
+CORS_ORIGIN_ALLOW_ALL = True  
+
+CORS_ALLOWED_ORIGINS = [
+    'http://0.0.0.0:8060',
+    'http://localhost:3000',
+    'http://172.26.0.2:3010',
 ]
 
 ROOT_URLCONF = 'IntrusionManagementAPI.urls'
@@ -130,3 +135,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
