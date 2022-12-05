@@ -101,7 +101,7 @@ class App extends Component {
 						<Col style={{ paddingLeft: '4%', textAlign: 'center' }}>
 							Column 1
 							<Row style={{ textAlign: 'center' }}>
-								<p>Row 1</p>
+								Row 1
 							</Row>
 							<Row style={{ textAlign: 'left', marginTop: '10%', marginLeft: '0.4%', marginRight: '0.4%' }}>
 								<h5>Alarms</h5>
@@ -111,9 +111,9 @@ class App extends Component {
 											<tr>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Alarm</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Type</th>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Off/On</th>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Configure</th>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingRight: '2%' }}>Data</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%', textAlign: 'center' }}>Off/On</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%', textAlign: 'center' }}>Property</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%', textAlign: 'center' }}>Data</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -122,9 +122,9 @@ class App extends Component {
 													<tr key={alarm.id}>
 														<td style={{ paddingLeft: '2%' }} >{alarm.name}</td>
 														<td style={{ paddingLeft: '2%' }} >{alarm.type}</td>
-														<td style={{ paddingLeft: '2%' }} ><Switch inputProps={{ 'aria-label': 'controlled' }}/></td>
-														<td className="icon" style={{ paddingLeft: '6%' }} > <GrSettingsOption /> </td>
-														<td className="icon" style={{ paddingLeft: '2%' }} > <GrDownload /> </td>
+														<td style={{ paddingLeft: '2%', textAlign: 'center' }} ><Switch inputProps={{ 'aria-label': 'controlled' }}/></td>
+														<td className="icon" style={{ paddingLeft: '2%', textAlign: 'center' }} >{alarm.property_id}</td>
+														<td className="icon" style={{ paddingLeft: '2%', textAlign: 'center' }} > <GrDownload /> </td>
 													</tr>
 												))
 												:
