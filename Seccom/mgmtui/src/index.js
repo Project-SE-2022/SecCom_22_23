@@ -1,9 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import AppNoPermissions from './AppNoPermissions'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { createRoot } from "react-dom/client"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import ClientInfo from "./pages/ClientInfo";
+import Layout from "./pages/Layout";
+import 'bootstrap/dist/css/bootstrap.css';
 import Keycloak from 'keycloak-js';
+import AppNoPermissions from './AppNoPermissions'
+import ReactDOM from 'react-dom/client';
 
 let initOptions = {
     "url": "http://localhost:8080/auth/",
@@ -58,3 +62,19 @@ keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
 }).catch(() => {
     console.error("Authenticated Failed");
 });
+
+export default function App() {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
+                    <Route path="client-info/*" element={<ClientInfo />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
+}
+
+// const root = createRoot(document.getElementById("root"))
+// root.render(<App />);
