@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import axios from "axios";
@@ -11,6 +11,7 @@ import Properties from '../Components/Properties';
 import Cameras from '../Components/Cameras';
 import Alarms from '../Components/Alarms';
 import Switch from '@mui/material/Switch';
+import { useLocation } from 'react-router-dom';
 
 class ClientInfo extends Component {
     constructor(props) {
@@ -24,7 +25,7 @@ class ClientInfo extends Component {
             dataAlarms: [],
             dataCameraIntrusion: [],
             dataAlarmIntrusion: [],
-            dataAlarmsOnOff: []
+            dataAlarmsOnOff: [],
         }
     }
 
@@ -114,7 +115,7 @@ class ClientInfo extends Component {
         if ((alarmsOnOff !== undefined) && (alarmsOnOff.length >= 0)) {
             for (let i = 0, len = alarmsOnOff.length, id = "", activated = ""; i < len; i++) {
                 activated = alarmsOnOff[i]["activated"];
-                if (activated == "Activated") {
+                if (activated === "Activated") {
                     alarmsOnOff[i]["activated"] = true;
                 } else {
                     alarmsOnOff[i]["activated"] = false;
@@ -126,8 +127,11 @@ class ClientInfo extends Component {
     }
 
     render() {
+        // TODO -> to get the client ID
+        console.log(this.props.location.state["client_id"])
 
-        const { dataProperties = [], dataPropertiesId = [], dataClientId = [], dataCameras = [], dataAlarms = [], dataCameraIntrusion = [], dataAlarmIntrusion = [], dataAlarmsOnOff = [] } = this.state;
+        const { dataProperties = [], dataPropertiesId = [], dataClientId = [], dataCameras = [], dataAlarms = [],
+            dataCameraIntrusion = [], dataAlarmIntrusion = [], dataAlarmsOnOff = [] } = this.state;
 
         var activated2 = '';
 
@@ -159,7 +163,7 @@ class ClientInfo extends Component {
         }
 
         const updateProperty = () => {
-            if (document.getElementById("propertiesModal").style.display == "block") {
+            if (document.getElementById("propertiesModal").style.display === "block") {
                 document.getElementById("propertiesModal").style.display = "none";
             } else {
                 document.getElementById("propertiesModal").style.display = "block";
@@ -402,23 +406,6 @@ class ClientInfo extends Component {
                                             <td style={{ paddingLeft: '2%' }} >------------</td>
                                             <td style={{ paddingLeft: '15%' }} >-------</td>
                                         </tr>
-                                        {/*dataProperties.length ?
-												dataProperties.map(property => (
-													<tr key={property.id} >
-														<td style={{ paddingLeft: '2%' }} >{property.id}</td>
-														<td style={{ paddingLeft: '15%' }} >{property.name}</td>
-														<td onClick={() => deleteProperty(property.id)} className="icon" style={{ paddingLeft: '7%' }} > <GrFormTrash style={{ minHeight:'40px', minWidth:'30px' }}/> </td>
-													</tr>
-												))
-												:
-												(
-													<tr>
-														<td style={{ paddingLeft: '6.5%' }} >------------</td>
-														<td style={{ paddingLeft: '7%' }} >-------</td>
-														<td style={{ paddingLeft: '7%' }} >-------</td>
-													</tr>
-												)
-												*/}
                                     </tbody>
                                 </table>
                             </div>
@@ -445,4 +432,9 @@ class ClientInfo extends Component {
     }
 }
 
-export default ClientInfo;
+const LocationComponent = props => {
+    const location = useLocation()
+    return <ClientInfo location={location} {...props} />
+}
+
+export default LocationComponent;

@@ -1,10 +1,10 @@
-import React, { Component , useState } from "react";
+import React from "react";
 import "./Modal.css";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import { GrVideo } from 'react-icons/gr';
 
-export default function Cameras({dataPropertiesId,dataCameras}) {
+export default function Cameras({ dataPropertiesId, dataCameras }) {
 
     var ip2 = "";
     var name2 = "";
@@ -49,7 +49,7 @@ export default function Cameras({dataPropertiesId,dataCameras}) {
 
     const updateLabels = () => {
         cameraId2 = document.getElementById("cameraIdSelectedUpdate").value;
-        if (cameraId2!='----'){
+        if (cameraId2 !== '----') {
             axios
                 .get("http://localhost:8050/SitesManagementAPI/camera/" + cameraId2)
                 .then((response) => {
@@ -63,86 +63,86 @@ export default function Cameras({dataPropertiesId,dataCameras}) {
             document.getElementById("cameraNameUpdate").value = '';
             document.getElementById("cameraIpUpdate").value = '';
         }
-        
+
     }
 
     return (
-    <>
-        <div id='CreateUpdateCameraForms' className="modal-content">
-            <h5 style={{ textAlign: 'left', marginBottom: '4%' }}>Create new camera <GrVideo style={{ minHeight:'25px', minWidth:'25px' }}/></h5>
-            <form onSubmit={handleSubmitCreateCamera}>
-                <label style={{ marginRight: '3%' }}>Property's ID: </label>
-                <select id="propertyIdSelected">
-                    <option>----</option>
-                    {dataPropertiesId.length ?
-                        dataPropertiesId.map(propertyId => (
-                            <option>{propertyId}</option>
-                        ))
-                        :
-                        (
-                            <option>None</option>
-                        )
-                    }
-                </select>
-                <br></br>
-                <label style={{ marginRight: '3%' }}>Camera's Name: </label>
-                <input style={{ marginRight: '3%' }}
-                    id="cameraName"
-                    type="text"
-                />
-                <br></br>
-                <label style={{ marginRight: '3%' }}>Camera's IP: </label>
-                <input style={{ marginRight: '3%' }}
-                    id="cameraIp"
-                    type="text"
-                />
-                <Button variant="outline-secondary" type="submit">Create</Button>
-            </form>
-            <hr style={{ marginTop: '7%' }}/>
-            <h5 style={{ textAlign: 'left', marginTop: '1%', marginBottom: '4%' }}>Update camera <GrVideo style={{ minHeight:'25px', minWidth:'25px' }}/></h5>
-            <form onSubmit={handleSubmitUpdateCamera}>
-                <label style={{ marginRight: '3%' }}>Select Camera ID: </label>
-                <select id="cameraIdSelectedUpdate" onChange={() => updateLabels()}>
-                    <option>----</option>
-                    {dataCameras.length ?
-                        dataCameras.map(camera => (
-                            <option>{camera.id}</option>
-                        ))
-                        :
-                        (
-                            <option>None</option>
-                        )
-                    }
-                </select>
-                <br></br>
-                <label style={{ marginRight: '3%' }}>Property's ID: </label>
-                <select id="propertyIdSelectedUp">
-                    <option>----</option>
-                    {dataPropertiesId.length ?
-                        dataPropertiesId.map(propertyId => (
-                            <option>{propertyId}</option>
-                        ))
-                        :
-                        (
-                            <option>None</option>
-                        )
-                    }
-                </select>
-                <br></br>
-                <label style={{ marginRight: '3%' }}>Camera's Name: </label>
-                <input style={{ marginRight: '3%' }}
-                    id="cameraNameUpdate"
-                    type="text"
-                />
-                <br></br>
-                <label style={{ marginRight: '3%' }}>Camera's IP: </label>
-                <input style={{ marginRight: '3%' }}
-                    id="cameraIpUpdate"
-                    type="text"
-                />
-                <Button variant="outline-secondary" type="submit">Update</Button>
-            </form>
-        </div>
-    </>
+        <>
+            <div id='CreateUpdateCameraForms' className="modal-content">
+                <h5 style={{ textAlign: 'left', marginBottom: '4%' }}>Create new camera <GrVideo style={{ minHeight: '25px', minWidth: '25px' }} /></h5>
+                <form onSubmit={handleSubmitCreateCamera}>
+                    <label style={{ marginRight: '3%' }}>Property's ID: </label>
+                    <select id="propertyIdSelected">
+                        <option>----</option>
+                        {dataPropertiesId.length ?
+                            dataPropertiesId.map(propertyId => (
+                                <option>{propertyId}</option>
+                            ))
+                            :
+                            (
+                                <option>None</option>
+                            )
+                        }
+                    </select>
+                    <br></br>
+                    <label style={{ marginRight: '3%' }}>Camera's Name: </label>
+                    <input style={{ marginRight: '3%' }}
+                        id="cameraName"
+                        type="text"
+                    />
+                    <br></br>
+                    <label style={{ marginRight: '3%' }}>Camera's IP: </label>
+                    <input style={{ marginRight: '3%' }}
+                        id="cameraIp"
+                        type="text"
+                    />
+                    <Button variant="outline-secondary" type="submit">Create</Button>
+                </form>
+                <hr style={{ marginTop: '7%' }} />
+                <h5 style={{ textAlign: 'left', marginTop: '1%', marginBottom: '4%' }}>Update camera <GrVideo style={{ minHeight: '25px', minWidth: '25px' }} /></h5>
+                <form onSubmit={handleSubmitUpdateCamera}>
+                    <label style={{ marginRight: '3%' }}>Select Camera ID: </label>
+                    <select id="cameraIdSelectedUpdate" onChange={() => updateLabels()}>
+                        <option>----</option>
+                        {dataCameras.length ?
+                            dataCameras.map(camera => (
+                                <option>{camera.id}</option>
+                            ))
+                            :
+                            (
+                                <option>None</option>
+                            )
+                        }
+                    </select>
+                    <br></br>
+                    <label style={{ marginRight: '3%' }}>Property's ID: </label>
+                    <select id="propertyIdSelectedUp">
+                        <option>----</option>
+                        {dataPropertiesId.length ?
+                            dataPropertiesId.map(propertyId => (
+                                <option>{propertyId}</option>
+                            ))
+                            :
+                            (
+                                <option>None</option>
+                            )
+                        }
+                    </select>
+                    <br></br>
+                    <label style={{ marginRight: '3%' }}>Camera's Name: </label>
+                    <input style={{ marginRight: '3%' }}
+                        id="cameraNameUpdate"
+                        type="text"
+                    />
+                    <br></br>
+                    <label style={{ marginRight: '3%' }}>Camera's IP: </label>
+                    <input style={{ marginRight: '3%' }}
+                        id="cameraIpUpdate"
+                        type="text"
+                    />
+                    <Button variant="outline-secondary" type="submit">Update</Button>
+                </form>
+            </div>
+        </>
     );
 }
