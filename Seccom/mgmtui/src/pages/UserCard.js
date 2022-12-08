@@ -2,12 +2,16 @@ import React from "react";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
-export default function UserCard({ nameUser, email, createdOn }) {
+export default function UserCard({ nameUser, email, createdOn, client_id }) {
     const navigate = useNavigate();
-    const clientInfo = (id) => {
-        navigate('/client-info', { state: { client_id: id, name: 'sabaoon' } });
+    const clientInfo = (id, nameUser, emailUser) => {
+        navigate('/client-info', { state: { client_id: id, name: nameUser, email: emailUser } });
     }
+
+    var date = new Date(createdOn);
+    var formattedDate = moment(date).format("").split("+");
 
     return (
         <>
@@ -23,9 +27,13 @@ export default function UserCard({ nameUser, email, createdOn }) {
                         <Card.Title>{nameUser}</Card.Title>
                         <Card.Text>{email}</Card.Text>
                         <Card.Text>
-                            <b>Created on: </b><span>{createdOn}</span>
+                            <p>
+                                <b>Created on: </b>
+                                <br />
+                                <span>{formattedDate[0].replace("T", " ")}</span>
+                            </p>
                         </Card.Text>
-                        <Button variant="primary" onClick={() => clientInfo("client_id")}>Info</Button>
+                        <Button variant="primary" onClick={() => clientInfo(client_id, nameUser, email)}>Info</Button>
                     </Card.Body>
                 </Card>
             </div>

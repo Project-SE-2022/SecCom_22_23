@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 
 const Paginate = ({
 	postsPerPage,
@@ -17,21 +18,19 @@ const Paginate = ({
 		<div className="pagination-container">
 			<ul className="pagination">
 				<li onClick={previousPage} className="page-number">
-					Prev
+					<Button onClick={previousPage} variant="outline-primary">Previous</Button>
 				</li>
 				{pageNumbers.map((number) => (
-					<li
-						key={number}
-						onClick={() => paginate(number)}
-						className={
-							'page-number ' + (number === currentPage ? 'active' : '')
-						}
-					>
-						{number}
+					<li style={{ marginLeft: '0.5%' }}>
+						<Button key={number}
+							onClick={() => paginate(number)}
+							className={
+								'page-number ' + (number === currentPage ? 'active' : '')
+							} variant="outline-primary">{number}</Button>
 					</li>
 				))}
-				<li onClick={nextPage} className="page-number">
-					Next
+				<li className="page-number" style={{ marginLeft: '0.5%' }}>
+					<Button onClick={nextPage} variant="outline-primary">Next</Button>
 				</li>
 			</ul>
 		</div>

@@ -5,7 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 function TopBar() {
     return (
         <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: 'rgba(39,170,226,255)' }} variant="light">
-            <Navbar.Brand href="#home" style={{ paddingLeft: '4%' }}>
+            <Navbar.Brand href="/" style={{ paddingLeft: '4%' }}>
                 <img
                     alt=""
                     src="/Logo.png"
