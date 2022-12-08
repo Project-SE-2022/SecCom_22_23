@@ -2,7 +2,7 @@ from django.shortcuts import HttpResponseRedirect
 from rest_framework import generics
 from .models import Intrusion
 
-from .serializers import IntrusionSerializer, VideoSerializer
+from .serializers import IntrusionSerializer, VideoSerializer, IntrusionSendCamerasSerializer
 
 from rest_framework.views import APIView
 
@@ -14,6 +14,8 @@ import boto3
 from botocore.client import Config
 
 from rest_framework.response import Response
+
+import requests
 
 
 
@@ -71,4 +73,32 @@ class IntrusionVideo(APIView):
             return Response(status=200)
         except:
             return Response(status=400)
+
+class IntrusionSendCameras(APIView):
+    serializer_class = IntrusionSendCamerasSerializer
+
+    def post(self,request):
+        serializer_object = IntrusionSendCamerasSerializer(data=request.data)
+
+        if serializer_object.is_valid():
+            camera_id = serializer_object.data.get('camera_id')
+            intrusion_timestamp = serializer_object.data.get('intrusion_timestamp')
+            frame = serializer_object.data.get('frame')
+
+            newIntrusionURL = 'http://imapi:8060/IntrusionManagementAPI/intrusions/'
+            
+            body = {  
+                'camera_id':camera_id,
+                'intrusion_timestamp': intrusion_timestamp,
+            }
+
+            response = requests.post(newIntrusionURL, data=body)
+
+            intrusion_id = response.json()['id']
+
+            # adicionar código para enviar mensagem à camara
+
+            return Response(status=200)
+
+        return Response(status=400)
 
