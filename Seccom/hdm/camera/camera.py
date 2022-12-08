@@ -14,20 +14,23 @@ import datetime
 import boto3
 import os
 
+import requests
+
+
 from trimmer import intrusionVideo
 
 
-def uploadTos3(intrusion_id):
-    client = boto3.resource('s3',aws_access_key_id = 'AKIAV3ZBHOANRIWJ6EUL',
-                            aws_secret_access_key = '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')
-    path = "intrusions/"
-    dir_list = os.listdir(path)
-    for file in dir_list:
-        if f'{intrusion_id}.avi' in file:
-            print(file)
-            upload_file_bucket = 'seccombucket'
-            upload_file_key = 'intrusions/' + str(file)
-            client.meta.client.upload_file(upload_file_key, upload_file_bucket, 'intrusions/'+file)
+# def uploadTos3(intrusion_id):
+#     client = boto3.resource('s3',aws_access_key_id = 'AKIAV3ZBHOANRIWJ6EUL',
+#                             aws_secret_access_key = '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')
+#     path = "intrusions/"
+#     dir_list = os.listdir(path)
+#     for file in dir_list:
+#         if f'{intrusion_id}.avi' in file:
+#             print(file)
+#             upload_file_bucket = 'seccombucket'
+#             upload_file_key = 'intrusions/' + str(file)
+#             client.meta.client.upload_file(upload_file_key, upload_file_bucket, 'intrusions/'+file)
 
 class Camera:
 
@@ -121,7 +124,12 @@ class Camera:
             # Send Video
             #files = {'document': open(video', 'rb')}
             #requests.post('http://127.0.0.1:8060/IntrusionManagementAPI/intrusions/video', json=files)
-            uploadTos3(intrusion_id)
+            #uploadTos3(intrusion_id)
+
+            url = "http://localhost:8060/IntrusionManagementAPI/intrusion/video"
+            files = {'upload_file': open(video_name,'rb')}
+            values = {'DB': 'photcat', 'OUT': 'csv', 'SHORT': 'short'}
+            r = requests.post(url, files=files, data=values)
             os.remove(video_name)
             message.ack()
 

@@ -13,7 +13,7 @@ CAMERA_ID = 1
 NUM_FRAMES_PER_SECOND_TO_PROCESS = 2
 
 # AMQP Variables
-RABBIT_MQ_URL = "b-d4d68495-3ca5-4819-a0ce-825e8e3fd943.mq.eu-west-3.amazonaws.com:5671"
+RABBIT_MQ_URL = "b-ca71b7e7-5065-4c38-a312-d3a9ca613905.mq.eu-west-3.amazonaws.com:5671"
 RABBIT_MQ_USERNAME = "broker"
 RABBIT_MQ_PASSWORD = "rabbitmqbroker"
 RABBIT_MQ_EXCHANGE_NAME = "human-detection-exchange"

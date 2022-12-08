@@ -17,6 +17,8 @@ from rest_framework.response import Response
 
 import requests
 
+import kombu
+from kombu import Connection, Exchange, Producer, Queue
 
 
 class IntrusionList(generics.ListCreateAPIView):
@@ -46,6 +48,7 @@ class IntrusionVideo(APIView):
                                 region_name='eu-west-3')
 
             upload_file_bucket = 'seccombucket'
+            #TODO: fazer fetch do ID correto
             upload_file_key = 'intrusions/30.avi'
 
             url = s3.generate_presigned_url(
@@ -96,7 +99,30 @@ class IntrusionSendCameras(APIView):
 
             intrusion_id = response.json()['id']
 
+            print(f"AQUIIIII:{camera_id}")
+            
             # adicionar código para enviar mensagem à camara
+
+            broker_username = "broker"
+            broker_password = "rabbitmqbroker"
+            broker_url = "b-ca71b7e7-5065-4c38-a312-d3a9ca613905.mq.eu-west-3.amazonaws.com:5671"
+            rabbit_url = f"amqp://{broker_username}:{broker_password}" \
+                    f"@{broker_url}/"
+            conn = Connection(
+                    rabbit_url,
+                    heartbeat=4,
+                    ssl=True)
+            channel = conn.channel()
+            exchange = Exchange("example-exchange", type="direct")
+            producer = Producer(exchange=exchange, channel=channel, routing_key=str(camera_id))
+            queue = Queue(name="", exchange=exchange, routing_key=str(camera_id))
+            queue.maybe_bind(conn)
+            queue.declare()
+
+            print(f"AQUIIIII:{camera_id}")
+            producer.publish(f"{frame};{intrusion_id}")
+
+#connect_to_video_queue("320;55")
 
             return Response(status=200)
 
