@@ -50,10 +50,11 @@ keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
                 console.error('Failed to refresh token');
             });
         }, 60000)
-        
+
         const root = ReactDOM.createRoot(document.getElementById("root"));
         root.render(
-            <App client_id={jwt_decode(keycloak.token)["sub"]}/>
+            <App client_id={jwt_decode(keycloak.token)["sub"]}
+                name={jwt_decode(keycloak.token)["given_name"] + " " + jwt_decode(keycloak.token)["family_name"]} />
         );
     }
 }).catch(() => {

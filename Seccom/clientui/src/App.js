@@ -27,7 +27,8 @@ class App extends Component {
 		this.interval = setInterval(() => this.getProperties({ time: Date.now() }), 1000);
 
 		this.setState({
-			client_id: this.props.client_id
+			client_id: this.props.client_id,
+			name: this.props.name
 		})
 	}
 
@@ -122,6 +123,7 @@ class App extends Component {
 		var camerasByProperty = this.state.camerasByProperty
 		var alarmsByProperty = this.state.alarmsByProperty
 		var camsIntrusions = this.state.camsIntrusions
+		var name = this.state.name
 
 		return (
 			<main className="Container">
@@ -151,7 +153,7 @@ class App extends Component {
 							</Nav.Link>
 						</Nav>
 						<Nav style={{ paddingRight: '5px', color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
-							SecCom user
+							{name}
 						</Nav>
 					</Navbar.Collapse>
 				</Navbar>
