@@ -31,12 +31,16 @@ class ClientInfo extends Component {
 			clientID: "",
 			name: "",
 			email: "",
+			propertySelected: "All"
 		}
 	}
 
 	// Intrusion table updated every second (1000ms)
 	componentDidMount() {
 		this.interval = setInterval(() => this.getProperties({ time: Date.now() }), 1000);
+		this.interval = setInterval(() => this.getCameras({ time: Date.now() }), 1000);
+		this.interval = setInterval(() => this.getAlarms({ time: Date.now() }), 1000);
+		this.interval = setInterval(() => this.updateChecked({ time: Date.now() }), 1000);
 
 		this.setState({
 			clientID: this.props.location.state["client_id"],
@@ -53,13 +57,18 @@ class ClientInfo extends Component {
 		axios
 			.get("http://localhost:8050/SitesManagementAPI/properties/")
 			.then((resp) => {
+				var array = [];
+				var array2 = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
 					if (resp.data[i]["clientID"] == this.state.clientID) {
-						this.setState({
-							dataProperties: resp.data,
-						})
+						array.push(resp.data[i]);
+						array2.push(resp.data[i]['id']);
 					}
 				}
+				this.setState({
+					dataProperties: array,
+					dataPropertiesId: array2
+				})
 			})
 			.catch((err) => console.log(err));
 	}
@@ -68,8 +77,21 @@ class ClientInfo extends Component {
 		axios
 			.get("http://localhost:8050/SitesManagementAPI/alarms/")
 			.then((resp) => {
+				var array = []
+				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
+					if (this.state.dataPropertiesId.includes(resp.data[i]["property_id"])){
+						if (this.state.propertySelected=='All'){
+							array.push(resp.data[i])
+						} else {
+							if (resp.data[i]["property_id"]==this.state.propertySelected){
+								array.push(resp.data[i])
+							}
+						}
+					}
+				}
+				console.log(array);
 				this.setState({
-					dataAlarms: resp.data
+					dataAlarms: array
 				})
 			})
 			.catch((err) => console.log(err));
@@ -103,31 +125,26 @@ class ClientInfo extends Component {
 		}
 	}
 
-	getPropertyInfo = (property_id) => {
-		console.log("clicked on row: " + property_id)
-		this.getCameras(property_id)
-		// this.getAlarms(property_id)
-	}
-
 	// TODO -> The method gets the correct data of the property but some way all the cameras are being showed
 	getCameras = (property_id) => {
-		console.log("CAMERAS")
-		console.log(this.state.dataCameras)
-
 		axios
 			.get("http://localhost:8050/SitesManagementAPI/cameras/")
 			.then((resp) => {
-				console.log(property_id)
+				var array = []
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
-					if (resp.data[i]["property_id"] == property_id) {
-						console.log("ENTROU")
-						console.log(resp.data[i])
-
-						this.setState({
-							dataCameras: resp.data,
-						})
+					if (this.state.dataPropertiesId.includes(resp.data[i]["property_id"])){
+						if (this.state.propertySelected=='All'){
+							array.push(resp.data[i])
+						} else {
+							if (resp.data[i]["property_id"]==this.state.propertySelected){
+								array.push(resp.data[i])
+							}
+						}
 					}
 				}
+				this.setState({
+					dataCameras: array
+				})
 			})
 			.catch((err) => console.log(err));		
 	}
@@ -213,6 +230,15 @@ class ClientInfo extends Component {
 				.catch((err) => console.log(err));
 		}
 
+		const selectProperty = (property_id) => {
+			if (property_id=='All'){
+				alert(`Loading data from all properties `)
+			} else {
+				alert(`Loading data from property ${property_id} `)
+			}
+			this.state.propertySelected = property_id;
+		}
+
 		return (
 			<div>
 				<Row id='mainRow'>
@@ -252,18 +278,18 @@ class ClientInfo extends Component {
 											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%' }}>ID</th>
 											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%' }}>Name</th>
 											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%', textAlign: 'center' }}>Configure</th>
-											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%', textAlign: 'center' }}>Delete</th>
+											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%', textAlign: 'center' }}>Delete</th>
 
 										</tr>
 									</thead>
 									<tbody>
 										{dataProperties.length ?
 											dataProperties.map(property => (
-												<tr key={property.id} onClick={() => this.getPropertyInfo(property.id)} id="properties_table_row">
-													<td style={{ paddingLeft: '5%' }} >{property.id}</td>
-													<td style={{ paddingLeft: '5%' }} >{property.name}</td>
-													<td onClick={() => updateProperty()} className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrSettingsOption style={{ minHeight: '20px', minWidth: '20px' }} /> </td>
-													<td onClick={() => deleteProperty(property.id, property.name)} className="icon" style={{ paddingLeft: '2%', textAlign: 'center' }} > <GrFormTrash style={{ minHeight: '40px', minWidth: '30px' }} /> </td>
+												<tr key={property.id} onClick={() => selectProperty(property.id)} id="properties_table_row">
+													<td style={{ paddingLeft: '5%' }}>{property.id}</td>
+													<td style={{ paddingLeft: '5%' }}>{property.name}</td>
+													<td className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrSettingsOption  onClick={() => updateProperty()} style={{ minHeight: '20px', minWidth: '20px' }} /> </td>
+													<td className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrFormTrash onClick={() => deleteProperty(property.id, property.name)} style={{ minHeight: '40px', minWidth: '30px' }} /> </td>
 												</tr>
 											))
 											:
@@ -272,13 +298,14 @@ class ClientInfo extends Component {
 													<td style={{ paddingLeft: '5%' }} >------------</td>
 													<td style={{ paddingLeft: '5%' }} >-------</td>
 													<td style={{ paddingLeft: '5%', textAlign: 'center' }} >-------</td>
-													<td style={{ paddingLeft: '0%', textAlign: 'center' }} >-------</td>
+													<td style={{ paddingLeft: '5%', textAlign: 'center' }} >-------</td>
 												</tr>
 											)
 										}
 									</tbody>
 								</table>
 							</div>
+							<Button variant="outline-secondary" onClick={() => selectProperty("All")}>View all cameras, alarms and intrusions</Button>
 						</Row>
 					</Col>
 					<Col style={{ textAlign: 'left' }}>
@@ -304,8 +331,8 @@ class ClientInfo extends Component {
 													<td style={{ paddingLeft: '5%' }} >{camera.name}</td>
 													<td style={{ paddingLeft: '5%' }} >{camera.ip}</td>
 													<td style={{ paddingLeft: '5%', textAlign: 'center' }} >{camera.property_id}</td>
-													<td onClick={() => updateCamera()} className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrSettingsOption style={{ minHeight: '20px', minWidth: '20px' }} /> </td>
-													<td onClick={() => deleteCamera(camera.id, camera.name)} className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrFormTrash style={{ minHeight: '40px', minWidth: '30px' }} /> </td>
+													<td className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrSettingsOption onClick={() => updateCamera()} style={{ minHeight: '20px', minWidth: '20px' }} /> </td>
+													<td className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrFormTrash onClick={() => deleteCamera(camera.id, camera.name)} style={{ minHeight: '40px', minWidth: '30px' }} /> </td>
 												</tr>
 											))
 											:
@@ -348,8 +375,8 @@ class ClientInfo extends Component {
 													<td style={{ paddingLeft: '5%' }} >{alarm.type}</td>
 													<td style={{ paddingLeft: '5%', textAlign: 'center' }} ><Switch id={"switch_" + alarm.id} checked={alarm.activated} onChange={() => onChangeChecked(alarm.id, alarm.activated, alarm.property_id, alarm.type, alarm.name)} inputProps={{ 'aria-label': 'controlled' }} /></td>
 													<td style={{ paddingLeft: '5%', textAlign: 'center' }} >{alarm.property_id}</td>
-													<td onClick={() => updateAlarm()} className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrSettingsOption style={{ minHeight: '20px', minWidth: '20px' }} /> </td>
-													<td onClick={() => deleteAlarm(alarm.id, alarm.name)} className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrFormTrash style={{ minHeight: '40px', minWidth: '30px' }} /> </td>
+													<td className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrSettingsOption onClick={() => updateAlarm()} style={{ minHeight: '20px', minWidth: '20px' }} /> </td>
+													<td className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrFormTrash onClick={() => deleteAlarm(alarm.id, alarm.name)} style={{ minHeight: '40px', minWidth: '30px' }} /> </td>
 													<td>
 													</td>
 												</tr>
