@@ -4,6 +4,7 @@ import App from './App';
 import AppNoPermissions from './AppNoPermissions'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Keycloak from 'keycloak-js';
+import jwt_decode from "jwt-decode";
 
 let initOptions = {
     "url": "http://localhost:8080/auth/",
@@ -49,10 +50,10 @@ keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
                 console.error('Failed to refresh token');
             });
         }, 60000)
-
+        
         const root = ReactDOM.createRoot(document.getElementById("root"));
         root.render(
-            <App />
+            <App client_id={jwt_decode(keycloak.token)["sub"]}/>
         );
     }
 }).catch(() => {

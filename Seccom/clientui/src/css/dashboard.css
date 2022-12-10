@@ -8,7 +8,7 @@ table {
 thead {
     background-color: #ededed;
     padding-left: 10px;
-    position: sticky;   
+    position: sticky;
     top: 0px;
     width: 100%;
 }
@@ -17,7 +17,7 @@ thead {
     cursor: pointer;
 }
 
-#table_container{
+#table_container {
     border: 2px solid #b7b7b7;
     height: 350px;
     width: 100%;
@@ -29,4 +29,9 @@ thead {
 
 tr {
     width: 100%;
+}
+
+#table_row:hover {
+    cursor: pointer;
+    background-color: #f7f7f7;
 }
