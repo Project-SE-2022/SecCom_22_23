@@ -97,10 +97,14 @@ class App extends Component {
 				})
 			})
 			.catch((err) => console.log(err));
+
+		this.setState({
+			camsIntrusions: [],
+		})
 	}
 
 	// To get the camera intrusions
-	getCamsIntrosuions = (camera_id) => {
+	getCamsIntrusions = (camera_id) => {
 		axios
 			.get("http://localhost:8060/IntrusionManagementAPI/intrusions/")
 			.then((resp) => {
@@ -166,7 +170,7 @@ class App extends Component {
 									<table>
 										<thead>
 											<tr>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>ID</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '4%' }}>ID</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Property</th>
 											</tr>
 										</thead>
@@ -174,14 +178,14 @@ class App extends Component {
 											{dataProperties.length ?
 												dataProperties.map(property => (
 													<tr id="table_row" key={property.id} onClick={() => this.getCamsAlarms(property.id)}>
-														<td style={{ paddingLeft: '2%' }} >{property.id}</td>
+														<td style={{ paddingLeft: '4%' }} >{property.id}</td>
 														<td style={{ paddingLeft: '2%' }} >{property.name}</td>
 													</tr>
 												))
 												:
 												(
 													<tr>
-														<td style={{ paddingLeft: '2%' }} >-------</td>
+														<td style={{ paddingLeft: '4%' }} >-------</td>
 														<td style={{ paddingLeft: '2%' }} >------------</td>
 													</tr>
 												)
@@ -220,26 +224,31 @@ class App extends Component {
 									<table>
 										<thead>
 											<tr>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '6.5%' }}>ID</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '4%' }}>ID</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Camera</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingRight: '7%' }} >IP</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingRight: '7%' }} >Delete</th>
 											</tr>
 										</thead>
 										<tbody>
 											{camerasByProperty.length ?
 												camerasByProperty.map(camera => (
-													<tr id="table_row" key={camera.id} onClick={() => this.getCamsIntrosuions(camera.id)}>
-														<td style={{ paddingLeft: '6.5%' }} >{camera.id}</td>
+													<tr id="table_row" key={camera.id} onClick={() => this.getCamsIntrusions(camera.id)}>
+														<td style={{ paddingLeft: '4%' }} >{camera.id}</td>
 														<td style={{ paddingLeft: '7%' }} >{camera.name}</td>
 														<td >{camera.ip}</td>
+														<td className="icon" style={{ paddingLeft: '2%' }} >
+															<GrFormTrash style={{ width: '30px', height: '30px' }} />
+														</td>
 													</tr>
 												))
 												:
 												(
 													<tr>
-														<td style={{ paddingLeft: '7%' }} >---</td>
-														<td style={{ paddingLeft: '6.5%' }} >------------</td>
+														<td style={{ paddingLeft: '4%' }} >---</td>
+														<td style={{ paddingLeft: '7%' }} >------------</td>
 														<td>------------</td>
+														<td style={{ paddingLeft: '3%' }}>---</td>
 													</tr>
 												)
 											}
@@ -254,32 +263,34 @@ class App extends Component {
 									<table>
 										<thead>
 											<tr>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '3%' }}>ID</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Alarm</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Type</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%', textAlign: 'center' }}>Off/On</th>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%', textAlign: 'center' }}>Configure</th>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%', textAlign: 'center' }}>Delete</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%', textAlign: 'center' }}>Delete</th>
 											</tr>
 										</thead>
 										<tbody>
 											{alarmsByProperty.length ?
 												alarmsByProperty.map(alarm => (
 													<tr id="table_row" key={alarm.id}>
+														<td style={{ paddingLeft: '3%' }} >{alarm.id}</td>
 														<td style={{ paddingLeft: '2%' }} >{alarm.name}</td>
 														<td style={{ paddingLeft: '2%' }} >{alarm.type}</td>
 														<td style={{ paddingLeft: '2%', textAlign: 'center' }} ><Switch inputProps={{ 'aria-label': 'controlled' }} /></td>
-														<td className="icon" style={{ paddingLeft: '2%', textAlign: 'center' }} > <GrSettingsOption /> </td>
-														<td className="icon" style={{ paddingLeft: '2%', textAlign: 'center' }} > <GrFormTrash /> </td>
+														<td className="icon" style={{ paddingLeft: '7%' }} >
+															<GrFormTrash style={{ width: '30px', height: '30px' }} />
+														</td>
 													</tr>
 												))
 												:
 												(
 													<tr>
-														<td style={{ paddingLeft: '2%' }} >------------</td>
+														<td style={{ paddingLeft: '3%' }} >------------</td>
 														<td style={{ paddingLeft: '2%' }} >-------</td>
+														<td style={{ paddingLeft: '2%' }} >-----</td>
 														<td style={{ paddingLeft: '2%', textAlign: 'center' }} >---</td>
 														<td style={{ paddingLeft: '2%', textAlign: 'center' }} >---</td>
-														<td style={{ paddingRight: '2%', textAlign: 'center' }} >---</td>
 													</tr>
 												)
 											}
@@ -307,7 +318,9 @@ class App extends Component {
 													<tr id="table_row" key={camera.id}>
 														<td style={{ paddingLeft: '6.5%' }} >{camera.id}</td>
 														<td style={{ paddingLeft: '7%' }} >{camera.intrusion_timestamp}</td>
-														<td className="icon" style={{ paddingRight: '7%' }} onClick={() => this.download_video(camera.id)} > <GrDownload /> </td>
+														<td className="icon" style={{ paddingLeft: '4%' }} onClick={() => this.download_video(camera.id)} >
+															<GrDownload style={{ width: '17%', height: '17%' }} />
+														</td>
 													</tr>
 												))
 												:
@@ -315,7 +328,7 @@ class App extends Component {
 													<tr>
 														<td style={{ paddingLeft: '6.5%' }} >---</td>
 														<td style={{ paddingLeft: '7%' }}>-------</td>
-														<td>---</td>
+														<td style={{ paddingLeft: '5%' }}>---</td>
 													</tr>
 												)
 											}
@@ -332,7 +345,7 @@ class App extends Component {
 											<tr>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '6.5%' }}>Alarm</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Type</th>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Property ID</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Date</th>
 											</tr>
 										</thead>
 										<tbody>
