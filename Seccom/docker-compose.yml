@@ -116,6 +116,12 @@ services:
       - "8443:8443/tcp"
       - "127.0.0.1:8444:8444/tcp"
 
+  redis:
+    container_name: "redis"
+    image: redis
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
 
 networks:
   keycloak_net:
