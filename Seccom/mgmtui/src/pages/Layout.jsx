@@ -2,10 +2,10 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import TopBar from "../Components/TopBar";
 
-const Layout = () => {
+const Layout = (name) => {
     return (
         <main className="Container">
-            <TopBar />
+            <TopBar name={name.name} />
             <Outlet />
         </main>
     )

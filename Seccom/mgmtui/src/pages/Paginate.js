@@ -16,7 +16,7 @@ const Paginate = ({
 	}
 	return (
 		<div className="pagination-container">
-			<ul className="pagination">
+			<ul className="pagination" style={{ paddingLeft: '10px', paddingTop: '10px' }}>
 				<li onClick={previousPage} className="page-number">
 					<Button onClick={previousPage} variant="outline-primary">Previous</Button>
 				</li>

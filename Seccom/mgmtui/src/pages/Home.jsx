@@ -29,9 +29,20 @@ class Home extends Component {
     }
 
     render() {
+        var clients = this.state.clients
+
         return (
             <div>
-                <CardList clients={this.state.clients}/>
+                {clients.length > 1 ?
+                    <div>
+                        <CardList clients={clients} />
+                    </div>
+                    :
+                    <h1 style={{ paddingLeft: '4%', paddingTop: '4%' }}>
+                        Loading clients...
+                    </h1>
+
+                }
             </div>
         )
     }

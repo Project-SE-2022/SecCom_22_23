@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Keycloak from 'keycloak-js';
 import AppNoPermissions from './AppNoPermissions'
 import ReactDOM from 'react-dom/client';
+import jwt_decode from "jwt-decode";
 
 let initOptions = {
     "url": "http://localhost:8080/auth/",
@@ -53,20 +54,23 @@ keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
             });
         }, 60000)
 
+        var name = jwt_decode(keycloak.token)["name"]
+
         const root = ReactDOM.createRoot(document.getElementById("root"));
         root.render(
-            <App />
+            <App name={name} />
         );
     }
 }).catch(() => {
     console.error("Authenticated Failed");
 });
 
-export default function App() {
+export default function App(name) {
+
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Layout />}>
+                <Route path="/" element={<Layout name={name.name} />}>
                     <Route index element={<Home />} />
                     <Route path="client-info/*" element={<ClientInfo />} />
                 </Route>
@@ -74,6 +78,3 @@ export default function App() {
         </BrowserRouter>
     );
 }
-
-// const root = createRoot(document.getElementById("root"))
-// root.render(<App />);
