@@ -10,17 +10,20 @@ export default function Cameras({ dataPropertiesId, dataCameras }) {
     var name2 = "";
     var propertyId2 = "";
     var cameraId2 = "";
+    var activated2 = "Deactivated";
 
     const handleSubmitCreateCamera = (event) => {
         event.preventDefault();
         ip2 = document.getElementById("cameraIp").value;
         propertyId2 = document.getElementById("propertyIdSelected").value;
         name2 = document.getElementById("cameraName").value;
+        activated2 = document.getElementById("activatedSelect").value;
         axios
             .post("http://localhost:8050/SitesManagementAPI/cameras/", {
                 "name": name2,
                 "ip": ip2,
-                "property_id": propertyId2
+                "property_id": propertyId2,
+                "activated": activated2
             })
             .then((response) => {
                 alert(`Camera ${name2} created with success for property ${propertyId2} `)
@@ -34,12 +37,14 @@ export default function Cameras({ dataPropertiesId, dataCameras }) {
         ip2 = document.getElementById("cameraIpUpdate").value;
         propertyId2 = document.getElementById("propertyIdSelectedUp").value;
         name2 = document.getElementById("cameraNameUpdate").value;
+        activated2 = document.getElementById("activatedSelectUpdate").value;
         axios
             .put("http://localhost:8050/SitesManagementAPI/camera/" + cameraId2, {
                 "id": cameraId2,
                 "name": name2,
                 "ip": ip2,
-                "property_id": propertyId2
+                "property_id": propertyId2,
+                "activated": activated2
             })
             .then((response) => {
                 alert(`Camera ${name2} updated `)
@@ -56,12 +61,14 @@ export default function Cameras({ dataPropertiesId, dataCameras }) {
                     document.getElementById("cameraNameUpdate").value = response.data["name"];
                     document.getElementById("cameraIpUpdate").value = response.data["ip"];
                     document.getElementById("propertyIdSelectedUp").value = response.data["property_id"];
+                    document.getElementById("activatedSelectUpdate").value = response.data["activated"];
                 })
                 .catch((err) => console.log(err));
         } else {
             document.getElementById("propertyIdSelectedUp").value = '----';
             document.getElementById("cameraNameUpdate").value = '';
             document.getElementById("cameraIpUpdate").value = '';
+            document.getElementById("activatedSelectUpdate").value = '----';
         }
 
     }
@@ -96,6 +103,13 @@ export default function Cameras({ dataPropertiesId, dataCameras }) {
                         id="cameraIp"
                         type="text"
                     />
+                    <br></br>
+                    <label style={{ marginRight: '3%' }}>Camera's Activated: </label>
+                    <select id="activatedSelect">
+                        <option>----</option>
+                        <option>Activated</option>
+                        <option>Deactivated</option>
+                    </select>
                     <Button variant="outline-secondary" type="submit">Create</Button>
                 </form>
                 <hr style={{ marginTop: '7%' }} />
@@ -140,6 +154,13 @@ export default function Cameras({ dataPropertiesId, dataCameras }) {
                         id="cameraIpUpdate"
                         type="text"
                     />
+                    <br></br>
+                    <label style={{ marginRight: '3%' }}>Camera's Activated: </label>
+                    <select id="activatedSelectUpdate">
+                        <option>----</option>
+                        <option>Activated</option>
+                        <option>Deactivated</option>
+                    </select>
                     <Button variant="outline-secondary" type="submit">Update</Button>
                 </form>
             </div>

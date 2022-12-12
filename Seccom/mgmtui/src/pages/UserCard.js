@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import axios from "axios";
 
 export default function UserCard({ nameUser, email, createdOn, client_id }) {
     const navigate = useNavigate();
@@ -12,6 +13,16 @@ export default function UserCard({ nameUser, email, createdOn, client_id }) {
 
     var date = new Date(createdOn);
     var formattedDate = moment(date).format("").split("+");
+
+    const deleteClient = (id) => {
+        axios
+            .delete("http://localhost:8050/SitesManagementAPI/user/" + id, {
+            })
+            .then((response) => {
+                alert(`Client deleted `)
+            })
+            .catch((err) => console.log(err));
+    }
 
     return (
         <>
@@ -34,6 +45,8 @@ export default function UserCard({ nameUser, email, createdOn, client_id }) {
                             </p>
                         </Card.Text>
                         <Button variant="primary" onClick={() => clientInfo(client_id, nameUser, email)}>Info</Button>
+                        <span> - </span>
+                        <Button variant="primary" onClick={() => deleteClient(client_id)}>Delete</Button>
                     </Card.Body>
                 </Card>
             </div>

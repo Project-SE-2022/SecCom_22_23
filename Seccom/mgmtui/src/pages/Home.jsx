@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import CardList from "./CardList";
 import axios from "axios";
+import Button from 'react-bootstrap/Button';
+import Clients from '../Components/Clients';
 
 class Home extends Component {
     constructor(props) {
@@ -31,8 +33,17 @@ class Home extends Component {
     render() {
         var clients = this.state.clients
 
+        const updateClient = () => {
+			if (document.getElementById("clientsModal").style.display === "block") {
+				document.getElementById("clientsModal").style.display = "none";
+			} else {
+				document.getElementById("clientsModal").style.display = "block";
+			}
+		}
+
         return (
             <div>
+                <Button variant="outline-primary" type="submit" onClick={() => updateClient()}>Create/Update Client</Button>
                 {clients.length > 1 ?
                     <div>
                         <CardList clients={clients} />
@@ -43,6 +54,11 @@ class Home extends Component {
                     </h1>
 
                 }
+                <div id='clientsModal' className="Modal" style={{ display: 'none' }}>
+					<div onClick={() => updateClient()} className="overlay"></div>
+					<Clients clients={clients}/>
+					<Button variant="outline-dark" type="submit" className='modal-contentClient' onClick={() => updateClient()}>X</Button>
+				</div>
             </div>
         )
     }

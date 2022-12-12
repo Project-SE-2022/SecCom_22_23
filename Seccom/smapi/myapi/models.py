@@ -35,9 +35,15 @@ class Property(models.Model):
         return self.name
 
 class Camera(models.Model):
+
+    ACTIVATED = 'Activated'
+    DEACTIVATED = 'Deactivated'
+    activated_types = [ (ACTIVATED,'Activated'), (DEACTIVATED,'Deactivated') ]
+
     property_id = models.ForeignKey(Property, db_column="property_id", null="False", on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     ip = models.CharField(max_length=50)
+    activated = models.CharField(max_length=11, choices=activated_types, default=DEACTIVATED)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

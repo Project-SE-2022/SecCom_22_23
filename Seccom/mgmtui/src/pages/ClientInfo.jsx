@@ -27,6 +27,7 @@ class ClientInfo extends Component {
 			dataCameraIntrusion: [],
 			dataAlarmIntrusion: [],
 			dataAlarmsOnOff: [],
+			dataCamerasOnOff: [],
 
 			clientID: "",
 			name: "",
@@ -41,6 +42,7 @@ class ClientInfo extends Component {
 		this.interval = setInterval(() => this.getCameras({ time: Date.now() }), 1000);
 		this.interval = setInterval(() => this.getAlarms({ time: Date.now() }), 1000);
 		this.interval = setInterval(() => this.updateChecked({ time: Date.now() }), 1000);
+		this.interval = setInterval(() => this.getClientsId({ time: Date.now() }), 1000);
 
 		this.setState({
 			clientID: this.props.location.state["client_id"],
@@ -69,6 +71,22 @@ class ClientInfo extends Component {
 					dataProperties: array,
 					dataPropertiesId: array2
 				})
+			})
+			.catch((err) => console.log(err));
+	}
+
+	getClientsId = () => {
+		axios
+			.get("http://localhost:8050/SitesManagementAPI/users/")
+			.then((resp) => {
+				var array = [];
+				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
+					array.push(resp.data[i]['id']);
+				}
+				this.setState({
+					dataClientId: array
+				})
+				console.log(this.state.dataClientId);
 			})
 			.catch((err) => console.log(err));
 	}
@@ -110,7 +128,9 @@ class ClientInfo extends Component {
 
 	updateChecked = () => {
 		var alarmsOnOff = [];
+		var camerasOnOff = [];
 		alarmsOnOff = this.state.dataAlarms;
+		camerasOnOff = this.state.dataCameras;
 		if ((alarmsOnOff !== undefined) && (alarmsOnOff.length >= 0)) {
 			for (let i = 0, len = alarmsOnOff.length, id = "", activated = ""; i < len; i++) {
 				activated = alarmsOnOff[i]["activated"];
@@ -122,6 +142,18 @@ class ClientInfo extends Component {
 
 			}
 			this.state.dataAlarmsOnOff = alarmsOnOff;
+		}
+		if ((camerasOnOff !== undefined) && (camerasOnOff.length >= 0)) {
+			for (let i = 0, len = camerasOnOff.length, id = "", activated = ""; i < len; i++) {
+				activated = camerasOnOff[i]["activated"];
+				if (activated === "Activated") {
+					camerasOnOff[i]["activated"] = true;
+				} else {
+					camerasOnOff[i]["activated"] = false;
+				}
+
+			}
+			this.state.dataCamerasOnOff = camerasOnOff;
 		}
 	}
 
@@ -151,7 +183,7 @@ class ClientInfo extends Component {
 
 	render() {
 		const { dataProperties = [], dataPropertiesId = [], dataClientId = [], dataCameras = [], dataAlarms = [],
-			dataCameraIntrusion = [], dataAlarmIntrusion = [], dataAlarmsOnOff = [] } = this.state;
+			dataCameraIntrusion = [], dataAlarmIntrusion = [], dataAlarmsOnOff = [], dataCamerasOnOff = [] } = this.state;
 
 		var activated2 = '';
 
@@ -230,6 +262,30 @@ class ClientInfo extends Component {
 				.catch((err) => console.log(err));
 		}
 
+		const onChangeCheckedCamera = (cameraId, activated, propertyId, ip, name) => {
+			if (activated == true) {
+				activated2 = 'Deactivated';
+			} else {
+				activated2 = 'Activated';
+			}
+			axios
+				.put("http://localhost:8050/SitesManagementAPI/camera/" + cameraId, {
+					"name": name,
+					"ip": ip,
+					"activated": activated2,
+					"property_id": propertyId
+				})
+				.then((response) => {
+					if (activated2 == 'Activated') {
+						document.getElementById("switchCamera_" + cameraId).checked = true;
+					} else {
+						document.getElementById("switchCamera_" + cameraId).checked = false;
+					}
+					alert(`Camera ${cameraId} ${activated2} `)
+				})
+				.catch((err) => console.log(err));
+		}
+
 		const selectProperty = (property_id) => {
 			if (property_id=='All'){
 				alert(`Loading data from all properties `)
@@ -269,7 +325,7 @@ class ClientInfo extends Component {
 						</Row>
 						<Row style={{ textAlign: 'left', marginTop: '10%', marginLeft: '0.4%', marginRight: '0.4%' }}>
 							<div style={{ display: 'inline-block', paddingLeft: '0px' }}>
-								<span className="h4" style={{ float: 'left' }}>Properties</span>
+								<span className="h4" style={{ float: 'left' }} onClick={() => updateProperty()}>Properties</span>
 							</div>
 							<div id="table_container" style={{ height: '612px' }}>
 								<table>
@@ -311,7 +367,7 @@ class ClientInfo extends Component {
 					<Col style={{ textAlign: 'left' }}>
 						<Row style={{ textAlign: 'left', marginTop: '4%', marginLeft: '0.4%', marginRight: '0.4%' }}>
 							<div style={{ display: 'inline-block', paddingLeft: '0px' }}>
-								<span className="h4" style={{ float: 'left' }}>Cameras</span>
+								<span className="h4" style={{ float: 'left' }} onClick={() => updateCamera()}>Cameras</span>
 							</div>
 							<div id="table_container">
 								<table>
@@ -319,17 +375,19 @@ class ClientInfo extends Component {
 										<tr style={{ height: '50px' }}>
 											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%' }}>Camera</th>
 											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%' }}>IP</th>
+											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%', textAlign: 'center' }}>On/Off</th>
 											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%', textAlign: 'center' }}>Property</th>
 											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%', textAlign: 'center' }}>Configure</th>
 											<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '5%', textAlign: 'center' }}>Delete</th>
 										</tr>
 									</thead>
 									<tbody>
-										{dataCameras.length ?
-											dataCameras.map(camera => (
+										{dataCamerasOnOff.length ?
+											dataCamerasOnOff.map(camera => (
 												<tr key={camera.id} >
 													<td style={{ paddingLeft: '5%' }} >{camera.name}</td>
 													<td style={{ paddingLeft: '5%' }} >{camera.ip}</td>
+													<td style={{ paddingLeft: '5%', textAlign: 'center' }} ><Switch id={"switchCamera_" + camera.id} checked={camera.activated} onChange={() => onChangeCheckedCamera(camera.id, camera.activated, camera.property_id, camera.ip, camera.name)} inputProps={{ 'aria-label': 'controlled' }} /></td>
 													<td style={{ paddingLeft: '5%', textAlign: 'center' }} >{camera.property_id}</td>
 													<td className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrSettingsOption onClick={() => updateCamera()} style={{ minHeight: '20px', minWidth: '20px' }} /> </td>
 													<td className="icon" style={{ paddingLeft: '5%', textAlign: 'center' }} > <GrFormTrash onClick={() => deleteCamera(camera.id, camera.name)} style={{ minHeight: '40px', minWidth: '30px' }} /> </td>
@@ -340,6 +398,7 @@ class ClientInfo extends Component {
 												<tr>
 													<td style={{ paddingLeft: '5%' }} >------------</td>
 													<td style={{ paddingLeft: '5%' }} >-------</td>
+													<td style={{ paddingLeft: '5%', textAlign: 'center' }} >---</td>
 													<td style={{ paddingLeft: '5%', textAlign: 'center' }} >-------</td>
 													<td style={{ paddingLeft: '5%', textAlign: 'center' }} >-------</td>
 													<td style={{ paddingLeft: '5%', textAlign: 'center' }} >-------</td>
@@ -352,7 +411,7 @@ class ClientInfo extends Component {
 						</Row>
 						<Row style={{ textAlign: 'left', marginTop: '10%', marginLeft: '0.4%', marginRight: '0.4%' }}>
 							<div style={{ display: 'inline-block', paddingLeft: '0px' }}>
-								<span className="h4" style={{ float: 'left' }}>Alarms</span>
+								<span className="h4" style={{ float: 'left' }} onClick={() => updateAlarm()}>Alarms</span>
 							</div>
 							<div id="table_container">
 								<table>
