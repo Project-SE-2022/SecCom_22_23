@@ -121,6 +121,99 @@ class App extends Component {
 			.catch((err) => console.log(err));
 	}
 
+	// To activate or deactivate the cameras
+	onOffCam = (e, camera_id, name, ip, property_id) => {
+		e.stopPropagation()
+
+		var value = ""
+		if (document.getElementById("camera_" + camera_id).checked == true) {
+			value = "Activated"
+		}
+		else {
+			value = "Deactivated"
+		}
+
+		axios
+			.put("http://localhost:8050/SitesManagementAPI/camera/" + camera_id, {
+				"name": name,
+				"ip": ip,
+				"activated": value,
+				"property_id": property_id
+			})
+			.then((response) => {
+				if (value === "Activated") {
+					document.getElementById("camera_" + camera_id).checked = true
+				}
+				else {
+					document.getElementById("camera_" + camera_id).checked = false
+				}
+
+				// Refresh cams data
+				axios
+					.get("http://localhost:8050/SitesManagementAPI/cameras/")
+					.then((resp) => {
+						var array = [];
+						for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
+							if (resp.data[i]["property_id"] == property_id) {
+								array.push(resp.data[i]);
+							}
+						}
+						this.setState({
+							camerasByProperty: array,
+						})
+					})
+					.catch((err) => console.log(err));
+			})
+			.catch((err) => console.log(err));
+	}
+
+	// To activate or deactivate alarm
+	onOffAlarm = (e, alarm_id, property_id, type, name) => {
+		e.stopPropagation()
+
+		var value = ""
+		if (document.getElementById("alarm_" + alarm_id).checked == true) {
+			value = "Activated"
+		}
+		else {
+			value = "Deactivated"
+		}
+
+		axios
+			.put("http://localhost:8050/SitesManagementAPI/alarm/" + alarm_id, {
+				"name": name,
+				"type": type,
+				"activated": value,
+				"property_id": property_id
+			})
+			.then((response) => {
+				if (value === "Activated") {
+					document.getElementById("alarm_" + alarm_id).checked = true
+				}
+				else {
+					document.getElementById("alarm_" + alarm_id).checked = false
+				}
+
+				// Refresh alarms data
+				axios
+					.get("http://localhost:8050/SitesManagementAPI/alarms/")
+					.then((resp) => {
+						var array = [];
+						for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
+							if (resp.data[i]["property_id"] == property_id) {
+								array.push(resp.data[i]);
+							}
+						}
+						this.setState({
+							alarmsByProperty: array,
+						})
+					})
+					.catch((err) => console.log(err));
+
+			})
+			.catch((err) => console.log(err));
+	}
+
 	render() {
 		var alarmData = this.state.alarmData
 		var dataProperties = this.state.dataProperties
@@ -225,7 +318,7 @@ class App extends Component {
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '4%' }}>ID</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '7%' }}>Camera</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingRight: '7%' }} >IP</th>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingRight: '7%' }} >Delete</th>
+												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Off/On</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -235,8 +328,15 @@ class App extends Component {
 														<td style={{ paddingLeft: '4%' }} >{camera.id}</td>
 														<td style={{ paddingLeft: '7%' }} >{camera.name}</td>
 														<td >{camera.ip}</td>
-														<td className="icon" style={{ paddingLeft: '2%' }} >
-															<GrFormTrash style={{ width: '30px', height: '30px' }} />
+														<td style={{ paddingLeft: '2%' }} >
+															{
+																camera.activated === 'Activated' ?
+																	<Switch inputProps={{ 'aria-label': 'controlled' }} id={"camera_" + camera.id} checked={true}
+																		onClick={(e) => this.onOffCam(e, camera.id, camera.name, camera.ip, camera.property_id)} />
+																	:
+																	<Switch inputProps={{ 'aria-label': 'controlled' }} id={"camera_" + camera.id} checked={false}
+																		onClick={(e) => this.onOffCam(e, camera.id, camera.name, camera.ip, camera.property_id)} />
+															}
 														</td>
 													</tr>
 												))
@@ -246,7 +346,7 @@ class App extends Component {
 														<td style={{ paddingLeft: '4%' }} >---</td>
 														<td style={{ paddingLeft: '7%' }} >------------</td>
 														<td>------------</td>
-														<td style={{ paddingLeft: '3%' }}>---</td>
+														<td style={{ paddingLeft: '5%' }}>---</td>
 													</tr>
 												)
 											}
@@ -265,7 +365,6 @@ class App extends Component {
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Alarm</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%' }}>Type</th>
 												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%', textAlign: 'center' }}>Off/On</th>
-												<th style={{ borderBottom: '2px solid #b7b7b7', paddingLeft: '2%', textAlign: 'center' }}>Delete</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -275,9 +374,15 @@ class App extends Component {
 														<td style={{ paddingLeft: '3%' }} >{alarm.id}</td>
 														<td style={{ paddingLeft: '2%' }} >{alarm.name}</td>
 														<td style={{ paddingLeft: '2%' }} >{alarm.type}</td>
-														<td style={{ paddingLeft: '2%', textAlign: 'center' }} ><Switch inputProps={{ 'aria-label': 'controlled' }} /></td>
-														<td className="icon" style={{ paddingLeft: '7%' }} >
-															<GrFormTrash style={{ width: '30px', height: '30px' }} />
+														<td style={{ paddingLeft: '2%', textAlign: 'center' }} >
+															{
+																alarm.activated === 'Activated' ?
+																	<Switch inputProps={{ 'aria-label': 'controlled' }} id={"alarm_" + alarm.id} checked={true}
+																		onClick={(e) => this.onOffAlarm(e, alarm.id, alarm.property_id, alarm.type, alarm.name)} />
+																	:
+																	<Switch inputProps={{ 'aria-label': 'controlled' }} id={"alarm_" + alarm.id} checked={false}
+																		onClick={(e) => this.onOffAlarm(e, alarm.id, alarm.property_id, alarm.type, alarm.name)} />
+															}
 														</td>
 													</tr>
 												))
@@ -287,7 +392,6 @@ class App extends Component {
 														<td style={{ paddingLeft: '3%' }} >------------</td>
 														<td style={{ paddingLeft: '2%' }} >-------</td>
 														<td style={{ paddingLeft: '2%' }} >-----</td>
-														<td style={{ paddingLeft: '2%', textAlign: 'center' }} >---</td>
 														<td style={{ paddingLeft: '2%', textAlign: 'center' }} >---</td>
 													</tr>
 												)
