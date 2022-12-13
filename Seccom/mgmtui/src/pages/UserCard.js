@@ -45,8 +45,10 @@ export default function UserCard({ nameUser, email, createdOn, client_id }) {
                             </p>
                         </Card.Text>
                         <Button variant="primary" onClick={() => clientInfo(client_id, nameUser, email)}>Info</Button>
-                        <span> - </span>
+                        <span> </span>
                         <Button variant="primary" onClick={() => deleteClient(client_id)}>Delete</Button>
+                        <span> </span>
+                        <Button variant="primary" >Update</Button>
                     </Card.Body>
                 </Card>
             </div>

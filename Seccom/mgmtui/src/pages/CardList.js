@@ -36,7 +36,7 @@ export default function CardList({ clients }) {
         <>
             <div style={{ marginLeft: '100px', marginRight: '100px' }}>
                 {blogPosts ? (
-                    <div style={{ paddingTop: '50px' }}>
+                    <div style={{ paddingTop: '10px' }}>
                         <Row>
                             <div className="blog-content-section">
                                 <div className="" style={{ display: 'inline', textAlign: 'center' }}>

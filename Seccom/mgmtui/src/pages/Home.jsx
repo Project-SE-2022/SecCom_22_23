@@ -34,18 +34,20 @@ class Home extends Component {
         var clients = this.state.clients
 
         const updateClient = () => {
-			if (document.getElementById("clientsModal").style.display === "block") {
-				document.getElementById("clientsModal").style.display = "none";
-			} else {
-				document.getElementById("clientsModal").style.display = "block";
-			}
-		}
+            if (document.getElementById("clientsModal").style.display === "block") {
+                document.getElementById("clientsModal").style.display = "none";
+            } else {
+                document.getElementById("clientsModal").style.display = "block";
+            }
+        }
 
         return (
             <div>
-                <Button variant="outline-primary" type="submit" onClick={() => updateClient()}>Create/Update Client</Button>
                 {clients.length > 1 ?
                     <div>
+                        <Button variant="outline-primary" type="submit" onClick={() => updateClient()}
+                            style={{ marginTop: '25px', marginLeft: '1655px' }}> Add new client
+                        </Button>
                         <CardList clients={clients} />
                     </div>
                     :
@@ -55,10 +57,10 @@ class Home extends Component {
 
                 }
                 <div id='clientsModal' className="Modal" style={{ display: 'none' }}>
-					<div onClick={() => updateClient()} className="overlay"></div>
-					<Clients clients={clients}/>
-					<Button variant="outline-dark" type="submit" className='modal-contentClient' onClick={() => updateClient()}>X</Button>
-				</div>
+                    <div onClick={() => updateClient()} className="overlay"></div>
+                    <Clients clients={clients} />
+                    <Button variant="outline-dark" type="submit" className='modal-contentClient' onClick={() => updateClient()}>X</Button>
+                </div>
             </div>
         )
     }
