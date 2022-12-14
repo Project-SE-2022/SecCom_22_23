@@ -8,6 +8,7 @@ WORKDIR /imapi
 COPY requirements.txt .
 
 RUN pip install --upgrade pip
+RUN apk add --no-cache gcc musl-dev python3-dev
 RUN pip3 install -r requirements.txt
 
 COPY . .
