@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # other dependencies
     'rest_framework',
     # 'corsheaders',
+    'drf_yasg',
     'requests',
 ]
 
@@ -57,7 +58,7 @@ MIDDLEWARE = [
 ]
 
 # Added CORS to the API
-CORS_ORIGIN_ALLOW_ALL = True  
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOWED_ORIGINS = [
     'http://0.0.0.0:8050',
