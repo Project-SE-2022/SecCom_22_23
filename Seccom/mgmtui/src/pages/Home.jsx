@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import CardList from "./CardList";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
-import Clients from '../Components/Clients';
+import ClientsCreate from '../Components/ClientsCreate';
+import ClientsUpdate from '../Components/ClientsUpdate';
 
 class Home extends Component {
     constructor(props) {
@@ -33,11 +34,19 @@ class Home extends Component {
     render() {
         var clients = this.state.clients
 
-        const updateClient = () => {
-            if (document.getElementById("clientsModal").style.display === "block") {
-                document.getElementById("clientsModal").style.display = "none";
+        const createClient = () => {
+            if (document.getElementById("clientsCreateModal").style.display === "block") {
+                document.getElementById("clientsCreateModal").style.display = "none";
             } else {
-                document.getElementById("clientsModal").style.display = "block";
+                document.getElementById("clientsCreateModal").style.display = "block";
+            }
+        }
+
+        const updateClient = () => {
+            if (document.getElementById("clientsUpdateModal").style.display === "block") {
+                document.getElementById("clientsUpdateModal").style.display = "none";
+            } else {
+                document.getElementById("clientsUpdateModal").style.display = "block";
             }
         }
 
@@ -45,10 +54,10 @@ class Home extends Component {
             <div>
                 {clients.length > 1 ?
                     <div>
-                        <Button variant="outline-primary" type="submit" onClick={() => updateClient()}
+                        <Button variant="outline-primary" type="submit" onClick={() => createClient()}
                             style={{ marginTop: '25px', marginLeft: '1655px' }}> Add new client
                         </Button>
-                        <CardList clients={clients} />
+                        <CardList clients={clients}  onClick={() => updateClient()}/>
                     </div>
                     :
                     <h1 style={{ paddingLeft: '4%', paddingTop: '4%' }}>
@@ -56,9 +65,14 @@ class Home extends Component {
                     </h1>
 
                 }
-                <div id='clientsModal' className="Modal" style={{ display: 'none' }}>
+                <div id='clientsCreateModal' className="Modal" style={{ display: 'none' }}>
+                    <div onClick={() => createClient()} className="overlay"></div>
+                    <ClientsCreate clients={clients} />
+                    <Button variant="outline-dark" type="submit" className='modal-contentClientCreate' onClick={() => createClient()}>X</Button>
+                </div>
+                <div id='clientsUpdateModal' className="Modal" style={{ display: 'none' }}>
                     <div onClick={() => updateClient()} className="overlay"></div>
-                    <Clients clients={clients} />
+                    <ClientsUpdate client_id={2} />
                     <Button variant="outline-dark" type="submit" className='modal-contentClient' onClick={() => updateClient()}>X</Button>
                 </div>
             </div>

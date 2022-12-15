@@ -4,23 +4,17 @@ import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import { GrHome } from 'react-icons/gr';
 
-export default function Properties({ dataClientId, dataProperties }) {
+export default function PropertiesUpdate({ property_id, clientId }) {
 
     var clientId2 = "";
     var name2 = "";
     var propertyId2 = "";
 
-    const handleSubmitCreateProperty = (event) => {
-        event.preventDefault();
-        clientId2 = document.getElementById("clientIdSelected").value;
-        name2 = document.getElementById("propertyName").value;
+    const loadDataProperty = () => {
         axios
-            .post("http://localhost:8050/SitesManagementAPI/properties/", {
-                "clientID": clientId2,
-                "name": name2
-            })
+            .get("http://localhost:8050/SitesManagementAPI/property/" + property_id)
             .then((response) => {
-                alert(`Property ${name2} created with success for client ${clientId2} `)
+                document.getElementById("propertyNameUpdate").value = response.data["name"];
             })
             .catch((err) => console.log(err));
     }
@@ -59,68 +53,33 @@ export default function Properties({ dataClientId, dataProperties }) {
 
     }
 
+    loadDataProperty();
+    
+
     return (
         <>
-            <div id='CreateUpdatePropertyForms' className="modal-content">
-                <h5 style={{ textAlign: 'left', marginBottom: '4%' }}>Create new property <GrHome style={{ minHeight: '25px', minWidth: '25px' }} /></h5>
-                <form onSubmit={handleSubmitCreateProperty}>
-                    <label style={{ marginRight: '3%' }}>Client's ID: </label>
-                    <select id="clientIdSelected">
-                        <option>----</option>
-                        {dataClientId.length ?
-                            dataClientId.map(clientId => (
-                                <option>{clientId}</option>
-                            ))
-                            :
-                            (
-                                <option>None</option>
-                            )
-                        }
-                    </select>
-                    <br></br>
-                    <label style={{ marginRight: '3%' }}>Property's Name: </label>
-                    <input style={{ marginRight: '3%' }}
-                        id="propertyName"
-                        type="text"
-                    />
-                    <Button variant="outline-secondary" type="submit">Create</Button>
-                </form>
-                <hr style={{ marginTop: '7%' }} />
+            <div id='UpdatePropertyForms' className="modal-content">
                 <h5 style={{ textAlign: 'left', marginTop: '1%', marginBottom: '4%' }}>Update property <GrHome style={{ minHeight: '25px', minWidth: '25px' }} /></h5>
-                <form onSubmit={handleSubmitUpdateProperty}>
+                <form onSubmit={handleSubmitUpdateProperty} style={{ textAlign: 'left' }} >
                     <label style={{ marginRight: '3%' }}>Select Property ID: </label>
                     <select id="propertyIdSelectedUpdate" onChange={() => updateLabels()}>
-                        <option>----</option>
-                        {dataProperties.length ?
-                            dataProperties.map(property => (
-                                <option>{property.id}</option>
-                            ))
-                            :
-                            (
-                                <option>None</option>
-                            )
-                        }
+                        <option>{property_id}</option>
                     </select>
+                    <br></br>
                     <br></br>
                     <label style={{ marginRight: '3%' }}>Client's ID: </label>
                     <select id="clientIdSelectedUpdate">
-                        <option>----</option>
-                        {dataClientId.length ?
-                            dataClientId.map(clientId => (
-                                <option>{clientId}</option>
-                            ))
-                            :
-                            (
-                                <option>None</option>
-                            )
-                        }
+                        <option>{clientId}</option>
                     </select>
+                    <br></br>
                     <br></br>
                     <label style={{ marginRight: '3%' }}>Property's Name: </label>
                     <input style={{ marginRight: '3%' }}
                         id="propertyNameUpdate"
                         type="text"
                     />
+                    <br></br>
+                    <br></br>
                     <Button variant="outline-secondary" type="submit">Update</Button>
                 </form>
             </div>

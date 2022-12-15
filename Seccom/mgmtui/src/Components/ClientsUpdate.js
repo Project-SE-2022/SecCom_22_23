@@ -4,32 +4,13 @@ import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import { GrUser } from 'react-icons/gr';
 
-export default function Clients({clients}) {
+export default function ClientsUpdate({client_id}) {
 
     var username2 = "";
     var firstname2 = "";
     var lastname2 = "";
     var email2 = "";
     var clientId2 = "";
-
-    const handleSubmitCreateClient = (event) => {
-        event.preventDefault();
-        username2 = document.getElementById("usernameLabel").value;
-        firstname2 = document.getElementById("firstnameLabel").value;
-        lastname2 = document.getElementById("lastnameLabel").value;
-        email2 = document.getElementById("emailLabel").value;
-        axios
-            .post("http://localhost:8050/SitesManagementAPI/users/", {
-                "username": username2,
-                "firstname": firstname2,
-                "lastname": lastname2,
-                "email": email2
-            })
-            .then((response) => {
-                alert(`Client ${firstname2} ${lastname2} created with success `)
-            })
-            .catch((err) => console.log(err));
-    }
 
     const handleSubmitUpdateClient = (event) => {
         event.preventDefault();
@@ -75,50 +56,14 @@ export default function Clients({clients}) {
 
     return (
         <>
-            <div id='CreateUpdateClientForms' className="modal-content">
-                <h5 style={{ textAlign: 'left', marginBottom: '4%' }}>Create new client <GrUser style={{ minHeight: '25px', minWidth: '25px' }} /></h5>
-                <form onSubmit={handleSubmitCreateClient}>
-                    <label style={{ marginRight: '3%' }}>Client's Username: </label>
-                    <input style={{ marginRight: '3%' }}
-                        id="usernameLabel"
-                        type="text"
-                    />
-                    <br></br>
-                    <label style={{ marginRight: '3%' }}>Client's First Name: </label>
-                    <input style={{ marginRight: '3%' }}
-                        id="firstnameLabel"
-                        type="text"
-                    />
-                    <br></br>
-                    <label style={{ marginRight: '3%' }}>Client's Last Name: </label>
-                    <input style={{ marginRight: '3%' }}
-                        id="lastnameLabel"
-                        type="text"
-                    />
-                    <br></br>
-                    <label style={{ marginRight: '3%' }}>Client's Email: </label>
-                    <input style={{ marginRight: '3%' }}
-                        id="emailLabel"
-                        type="text"
-                    />
-                    <Button variant="outline-secondary" type="submit">Create</Button>
-                </form>
-                <hr style={{ marginTop: '7%' }} />
+            <div id='UpdateClientForms' className="modal-content">
                 <h5 style={{ textAlign: 'left', marginTop: '1%', marginBottom: '4%' }}>Update client <GrUser style={{ minHeight: '25px', minWidth: '25px' }} /></h5>
-                <form onSubmit={handleSubmitUpdateClient}>
+                <form onSubmit={handleSubmitUpdateClient} style={{ textAlign: 'left'}}>
                     <label style={{ marginRight: '3%' }}>Select Client ID: </label>
                     <select id="clientIdSelectedUpdate" onChange={() => updateLabels()}>
-                        <option>----</option>
-                        {clients.length ?
-                            clients.map(client => (
-                                <option>{client.id}</option>
-                            ))
-                            :
-                            (
-                                <option>None</option>
-                            )
-                        }
+                        <option>{client_id}</option>
                     </select>
+                    <br></br>
                     <br></br>
                     <label style={{ marginRight: '3%' }}>Client's Username: </label>
                     <input style={{ marginRight: '3%' }}
@@ -126,11 +71,13 @@ export default function Clients({clients}) {
                         type="text"
                     />
                     <br></br>
+                    <br></br>
                     <label style={{ marginRight: '3%' }}>Client's First Name: </label>
                     <input style={{ marginRight: '3%' }}
                         id="firstnameLabelUp"
                         type="text"
                     />
+                    <br></br>
                     <br></br>
                     <label style={{ marginRight: '3%' }}>Client's Last Name: </label>
                     <input style={{ marginRight: '3%' }}
@@ -138,11 +85,14 @@ export default function Clients({clients}) {
                         type="text"
                     />
                     <br></br>
+                    <br></br>
                     <label style={{ marginRight: '3%' }}>Client's Email: </label>
                     <input style={{ marginRight: '3%' }}
                         id="emailLabelUp"
                         type="text"
                     />
+                    <br></br>
+                    <br></br>
                     <Button variant="outline-secondary" type="submit">Update</Button>
                 </form>
             </div>

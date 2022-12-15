@@ -7,9 +7,12 @@ import Button from 'react-bootstrap/Button';
 import '../App.css';
 import '../Components/Modal.css';
 import { GrFormTrash, GrSettingsOption, GrDownload } from 'react-icons/gr';
-import Properties from '../Components/Properties';
-import Cameras from '../Components/Cameras';
-import Alarms from '../Components/Alarms';
+import PropertiesCreate from '../Components/PropertiesCreate';
+import PropertiesUpdate from '../Components/PropertiesUpdate';
+import CamerasCreate from '../Components/CamerasCreate';
+import CamerasUpdate from '../Components/CamerasUpdate';
+import AlarmsCreate from '../Components/AlarmsCreate';
+import AlarmsUpdate from '../Components/AlarmsUpdate';
 import Switch from '@mui/material/Switch';
 import { useLocation } from 'react-router-dom';
 
@@ -36,7 +39,10 @@ class ClientInfo extends Component {
 			clientID: "",
 			name: "",
 			email: "",
-			propertySelected: "All"
+
+			propertySelected: "",
+			cameraSelected: "",
+			alarmSelected: "",
 		}
 	}
 
@@ -61,7 +67,6 @@ class ClientInfo extends Component {
 			.get("http://localhost:8050/SitesManagementAPI/properties/")
 			.then((resp) => {
 				var array = [];
-
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
 					if (resp.data[i]["clientID"] == this.state.clientID) {
 						array.push(resp.data[i]);
@@ -76,6 +81,7 @@ class ClientInfo extends Component {
 
 	// To get the cameras and alarms
 	getCamsAlarms = (property_id) => {
+		this.state.propertySelected = property_id;
 		// Get cameras
 		axios
 			.get("http://localhost:8050/SitesManagementAPI/cameras/")
@@ -115,6 +121,7 @@ class ClientInfo extends Component {
 
 	// To get the camera intrusions
 	getCamsIntrusions = (camera_id) => {
+		this.state.cameraSelected = camera_id;
 		axios
 			.get("http://localhost:8060/IntrusionManagementAPI/intrusions/")
 			.then((resp) => {
@@ -129,6 +136,11 @@ class ClientInfo extends Component {
 				})
 			})
 			.catch((err) => console.log(err));
+	}
+
+	// To get the alarm intrusions (NOT DONE YET)
+	getAlrmsIntrusions = (alarm_id) => {
+		this.state.alarmSelected = alarm_id;
 	}
 
 	// To download the intrusion clipe
@@ -282,27 +294,60 @@ class ClientInfo extends Component {
 	render() {
 		const { dataPropertiesId = [], dataClientId = [], dataCameras = [], dataAlarms = [] } = this.state;
 
-		const updateProperty = () => {
-			if (document.getElementById("propertiesModal").style.display === "block") {
-				document.getElementById("propertiesModal").style.display = "none";
+		const createProperty = () => {
+			if (document.getElementById("propertiesCreateModal").style.display === "block") {
+				document.getElementById("propertiesCreateModal").style.display = "none";
 			} else {
-				document.getElementById("propertiesModal").style.display = "block";
+				document.getElementById("propertiesCreateModal").style.display = "block";
 			}
 		}
 
-		const updateCamera = () => {
-			if (document.getElementById("camerasModal").style.display == "block") {
-				document.getElementById("camerasModal").style.display = "none";
+		const updateProperty = () => {
+			if (document.getElementById("propertiesUpdateModal").style.display === "block") {
+				document.getElementById("propertiesUpdateModal").style.display = "none";
 			} else {
-				document.getElementById("camerasModal").style.display = "block";
+				document.getElementById("propertiesUpdateModal").style.display = "block";
+			}
+		}
+
+		const createCamera = () => {
+			if (this.state.propertySelected===""){
+				alert("Select a property before creating a new Camera.");
+			} else {
+				if (document.getElementById("camerasCreateModal").style.display == "block") {
+					document.getElementById("camerasCreateModal").style.display = "none";
+				} else {
+					document.getElementById("camerasCreateModal").style.display = "block";
+				}
+			}
+			
+		}
+
+		const updateCamera = () => {
+			if (document.getElementById("camerasUpdateModal").style.display == "block") {
+				document.getElementById("camerasUpdateModal").style.display = "none";
+			} else {
+				document.getElementById("camerasUpdateModal").style.display = "block";
+			}
+		}
+
+		const createAlarm = () => {
+			if (this.state.propertySelected===""){
+				alert("Select a property before creating a new Alarm.");
+			} else {
+				if (document.getElementById("alarmsCreateModal").style.display == "block") {
+					document.getElementById("alarmsCreateModal").style.display = "none";
+				} else {
+					document.getElementById("alarmsCreateModal").style.display = "block";
+				}
 			}
 		}
 
 		const updateAlarm = () => {
-			if (document.getElementById("alarmsModal").style.display == "block") {
-				document.getElementById("alarmsModal").style.display = "none";
+			if (document.getElementById("alarmsUpdateModal").style.display == "block") {
+				document.getElementById("alarmsUpdateModal").style.display = "none";
 			} else {
-				document.getElementById("alarmsModal").style.display = "block";
+				document.getElementById("alarmsUpdateModal").style.display = "block";
 			}
 		}
 
@@ -341,8 +386,8 @@ class ClientInfo extends Component {
 						</Row>
 						<Row style={{ textAlign: 'left', marginTop: '10%', marginLeft: '0.4%', marginRight: '0.4%' }}>
 							<div style={{ display: 'inline-block', paddingLeft: '0px' }}>
-								<span className="h4" style={{ float: 'left' }} onClick={() => updateProperty()}>Properties</span>
-								<Button style={{ marginLeft: '360px', marginBottom: '10px' }}>Add Property</Button>
+								<span className="h4" style={{ float: 'left' }}>Properties</span>
+								<Button style={{ marginLeft: '360px', marginBottom: '10px' }} onClick={() => createProperty()}>Add Property</Button>
 							</div>
 
 							<div id="table_container" style={{ height: '600px' }}>
@@ -389,8 +434,8 @@ class ClientInfo extends Component {
 					<Col style={{ textAlign: 'left' }}>
 						<Row style={{ textAlign: 'left', marginTop: '4%', marginLeft: '0.4%', marginRight: '0.4%' }}>
 							<div style={{ display: 'inline-block', paddingLeft: '0px' }}>
-								<span className="h4" style={{ float: 'left' }} onClick={() => updateCamera()}>Cameras</span>
-								<Button style={{ marginLeft: '391px', marginBottom: '10px' }}>Add Camera</Button>
+								<span className="h4" style={{ float: 'left' }}>Cameras</span>
+								<Button style={{ marginLeft: '391px', marginBottom: '10px' }} onClick={() => createCamera()}>Add Camera</Button>
 							</div>
 							<div id="table_container">
 								<table>
@@ -443,8 +488,8 @@ class ClientInfo extends Component {
 						</Row>
 						<Row style={{ textAlign: 'left', marginTop: '6%', marginLeft: '0.4%', marginRight: '0.4%' }}>
 							<div style={{ display: 'inline-block', paddingLeft: '0px' }}>
-								<span className="h4" style={{ float: 'left' }} onClick={() => updateAlarm()}>Alarms</span>
-								<Button style={{ marginLeft: '421px', marginBottom: '10px' }}>Add Alarm</Button>
+								<span className="h4" style={{ float: 'left' }}>Alarms</span>
+								<Button style={{ marginLeft: '421px', marginBottom: '10px' }} onClick={() => createAlarm()}>Add Alarm</Button>
 							</div>
 							<div id="table_container">
 								<table>
@@ -460,7 +505,7 @@ class ClientInfo extends Component {
 									<tbody>
 										{alarmsByProperty.length ?
 											alarmsByProperty.map(alarm => (
-												<tr key={alarm.id} id="table_row" >
+												<tr key={alarm.id} id="table_row" onClick={() => this.getAlrmsIntrusions(alarm.id)}>
 													<td style={{ paddingLeft: '2%' }} >{alarm.name}</td>
 													<td style={{ paddingLeft: '2%' }} >{alarm.type}</td>
 													<td style={{ paddingLeft: '2%', textAlign: 'center' }} >
@@ -554,20 +599,35 @@ class ClientInfo extends Component {
 						</Row>
 					</Col>
 				</Row >
-				<div id='propertiesModal' className="Modal" style={{ display: 'none' }}>
+				<div id='propertiesCreateModal' className="Modal" style={{ display: 'none' }}>
+					<div onClick={() => createProperty()} className="overlay"></div>
+					<PropertiesCreate clientId={this.state.clientID} />
+					<Button variant="outline-dark" type="submit" className='modal-contentPropertyCreate' onClick={() => createProperty()}>X</Button>
+				</div>
+				<div id='propertiesUpdateModal' className="Modal" style={{ display: 'none' }}>
 					<div onClick={() => updateProperty()} className="overlay"></div>
-					<Properties dataClientId={dataClientId} dataProperties={dataProperties} />
-					<Button variant="outline-dark" type="submit" className='modal-contentProperty' onClick={() => updateProperty()}>X</Button>
+					<PropertiesUpdate property_id={this.state.propertySelected} clientId={this.state.clientID}/>
+					<Button variant="outline-dark" type="submit" className='modal-contentPropertyUpdate' onClick={() => updateProperty()}>X</Button>
 				</div>
-				<div id='camerasModal' className="Modal" style={{ display: 'none' }}>
+				<div id='camerasCreateModal' className="Modal" style={{ display: 'none' }}>
+					<div onClick={() => createCamera()} className="overlay"></div>
+					<CamerasCreate property_id={this.state.propertySelected} />
+					<Button variant="outline-dark" type="submit" className='modal-contentCameraCreate' onClick={() => createCamera()}>X</Button>
+				</div>
+				<div id='camerasUpdateModal' className="Modal" style={{ display: 'none' }}>
 					<div onClick={() => updateCamera()} className="overlay"></div>
-					<Cameras dataPropertiesId={dataPropertiesId} dataCameras={dataCameras} />
-					<Button variant="outline-dark" type="submit" className='modal-contentCamera' onClick={() => updateCamera()}>X</Button>
+					<CamerasUpdate property_id={this.state.propertySelected} camera_id={this.state.cameraSelected} />
+					<Button variant="outline-dark" type="submit" className='modal-contentCameraUpdate' onClick={() => updateCamera()}>X</Button>
 				</div>
-				<div id='alarmsModal' className="Modal" style={{ display: 'none' }}>
+				<div id='alarmsCreateModal' className="Modal" style={{ display: 'none' }}>
+					<div onClick={() => createAlarm()} className="overlay"></div>
+					<AlarmsCreate property_id={this.state.propertySelected} />
+					<Button variant="outline-dark" type="submit" className='modal-contentAlarmCreate' onClick={() => createAlarm()}>X</Button>
+				</div>
+				<div id='alarmsUpdateModal' className="Modal" style={{ display: 'none' }}>
 					<div onClick={() => updateAlarm()} className="overlay"></div>
-					<Alarms dataPropertiesId={dataPropertiesId} dataAlarms={dataAlarms} />
-					<Button variant="outline-dark" type="submit" className='modal-contentAlarm' onClick={() => updateAlarm()}>X</Button>
+					<AlarmsUpdate property_id={this.state.propertySelected} alarm_id={this.state.alarmSelected} />
+					<Button variant="outline-dark" type="submit" className='modal-contentAlarmUpdate' onClick={() => updateAlarm()}>X</Button>
 				</div>
 			</div >
 		);

@@ -4,7 +4,7 @@ import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import { GrVideo } from 'react-icons/gr';
 
-export default function Cameras({ dataPropertiesId, dataCameras }) {
+export default function Cameras({ property_id, camera_id }) {
 
     var ip2 = "";
     var name2 = "";
@@ -12,21 +12,13 @@ export default function Cameras({ dataPropertiesId, dataCameras }) {
     var cameraId2 = "";
     var activated2 = "Deactivated";
 
-    const handleSubmitCreateCamera = (event) => {
-        event.preventDefault();
-        ip2 = document.getElementById("cameraIp").value;
-        propertyId2 = document.getElementById("propertyIdSelected").value;
-        name2 = document.getElementById("cameraName").value;
-        activated2 = document.getElementById("activatedSelect").value;
+    const loadDataCamera = () => {
         axios
-            .post("http://localhost:8050/SitesManagementAPI/cameras/", {
-                "name": name2,
-                "ip": ip2,
-                "property_id": propertyId2,
-                "activated": activated2
-            })
+            .get("http://localhost:8050/SitesManagementAPI/camera/" + camera_id)
             .then((response) => {
-                alert(`Camera ${name2} created with success for property ${propertyId2} `)
+                document.getElementById("cameraNameUpdate").value = response.data["name"];
+                document.getElementById("cameraIpUpdate").value = response.data["ip"];
+                document.getElementById("activatedSelectUpdate").value = response.data["activated"];
             })
             .catch((err) => console.log(err));
     }
@@ -73,75 +65,24 @@ export default function Cameras({ dataPropertiesId, dataCameras }) {
 
     }
 
+    loadDataCamera();
+
     return (
         <>
-            <div id='CreateUpdateCameraForms' className="modal-content">
-                <h5 style={{ textAlign: 'left', marginBottom: '4%' }}>Create new camera <GrVideo style={{ minHeight: '25px', minWidth: '25px' }} /></h5>
-                <form onSubmit={handleSubmitCreateCamera}>
-                    <label style={{ marginRight: '3%' }}>Property's ID: </label>
-                    <select id="propertyIdSelected">
-                        <option>----</option>
-                        {dataPropertiesId.length ?
-                            dataPropertiesId.map(propertyId => (
-                                <option>{propertyId}</option>
-                            ))
-                            :
-                            (
-                                <option>None</option>
-                            )
-                        }
-                    </select>
-                    <br></br>
-                    <label style={{ marginRight: '3%' }}>Camera's Name: </label>
-                    <input style={{ marginRight: '3%' }}
-                        id="cameraName"
-                        type="text"
-                    />
-                    <br></br>
-                    <label style={{ marginRight: '3%' }}>Camera's IP: </label>
-                    <input style={{ marginRight: '3%' }}
-                        id="cameraIp"
-                        type="text"
-                    />
-                    <br></br>
-                    <label style={{ marginRight: '3%' }}>Camera's Activated: </label>
-                    <select id="activatedSelect">
-                        <option>----</option>
-                        <option>Activated</option>
-                        <option>Deactivated</option>
-                    </select>
-                    <Button variant="outline-secondary" type="submit">Create</Button>
-                </form>
-                <hr style={{ marginTop: '7%' }} />
+            <div id='UpdateCameraForms' className="modal-content">
                 <h5 style={{ textAlign: 'left', marginTop: '1%', marginBottom: '4%' }}>Update camera <GrVideo style={{ minHeight: '25px', minWidth: '25px' }} /></h5>
-                <form onSubmit={handleSubmitUpdateCamera}>
+                <form onSubmit={handleSubmitUpdateCamera} style={{ textAlign: 'left'}}>
                     <label style={{ marginRight: '3%' }}>Select Camera ID: </label>
                     <select id="cameraIdSelectedUpdate" onChange={() => updateLabels()}>
-                        <option>----</option>
-                        {dataCameras.length ?
-                            dataCameras.map(camera => (
-                                <option>{camera.id}</option>
-                            ))
-                            :
-                            (
-                                <option>None</option>
-                            )
-                        }
+                        <option>{camera_id}</option>
                     </select>
+                    <br></br>
                     <br></br>
                     <label style={{ marginRight: '3%' }}>Property's ID: </label>
                     <select id="propertyIdSelectedUp">
-                        <option>----</option>
-                        {dataPropertiesId.length ?
-                            dataPropertiesId.map(propertyId => (
-                                <option>{propertyId}</option>
-                            ))
-                            :
-                            (
-                                <option>None</option>
-                            )
-                        }
+                        <option>{property_id}</option>
                     </select>
+                    <br></br>
                     <br></br>
                     <label style={{ marginRight: '3%' }}>Camera's Name: </label>
                     <input style={{ marginRight: '3%' }}
@@ -149,11 +90,13 @@ export default function Cameras({ dataPropertiesId, dataCameras }) {
                         type="text"
                     />
                     <br></br>
+                    <br></br>
                     <label style={{ marginRight: '3%' }}>Camera's IP: </label>
                     <input style={{ marginRight: '3%' }}
                         id="cameraIpUpdate"
                         type="text"
                     />
+                    <br></br>
                     <br></br>
                     <label style={{ marginRight: '3%' }}>Camera's Activated: </label>
                     <select id="activatedSelectUpdate">
@@ -161,6 +104,8 @@ export default function Cameras({ dataPropertiesId, dataCameras }) {
                         <option>Activated</option>
                         <option>Deactivated</option>
                     </select>
+                    <br></br>
+                    <br></br>
                     <Button variant="outline-secondary" type="submit">Update</Button>
                 </form>
             </div>
