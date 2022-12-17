@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Modal.css";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
@@ -11,6 +11,8 @@ export default function ClientsUpdate({client_id}) {
     var lastname2 = "";
     var email2 = "";
     var clientId2 = "";
+
+    const [ClientUse, setClientUse] = useState(0);
 
     const handleSubmitUpdateClient = (event) => {
         event.preventDefault();

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Modal.css";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
@@ -10,13 +10,18 @@ export default function PropertiesUpdate({ property_id, clientId }) {
     var name2 = "";
     var propertyId2 = "";
 
+    const [propertyUse, setPropertyUse] = useState(0);
+
     const loadDataProperty = () => {
-        axios
+        if (propertyUse!==property_id){
+            axios
             .get("http://localhost:8050/SitesManagementAPI/property/" + property_id)
             .then((response) => {
                 document.getElementById("propertyNameUpdate").value = response.data["name"];
             })
             .catch((err) => console.log(err));
+            setPropertyUse(property_id);
+        }
     }
 
     const handleSubmitUpdateProperty = (event) => {

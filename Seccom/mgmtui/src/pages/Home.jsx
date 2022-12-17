@@ -42,14 +42,6 @@ class Home extends Component {
             }
         }
 
-        const updateClient = () => {
-            if (document.getElementById("clientsUpdateModal").style.display === "block") {
-                document.getElementById("clientsUpdateModal").style.display = "none";
-            } else {
-                document.getElementById("clientsUpdateModal").style.display = "block";
-            }
-        }
-
         return (
             <div>
                 {clients.length > 1 ?
@@ -57,7 +49,7 @@ class Home extends Component {
                         <Button variant="outline-primary" type="submit" onClick={() => createClient()}
                             style={{ marginTop: '25px', marginLeft: '1655px' }}> Add new client
                         </Button>
-                        <CardList clients={clients}  onClick={() => updateClient()}/>
+                        <CardList clients={clients}/>
                     </div>
                     :
                     <h1 style={{ paddingLeft: '4%', paddingTop: '4%' }}>
@@ -69,11 +61,6 @@ class Home extends Component {
                     <div onClick={() => createClient()} className="overlay"></div>
                     <ClientsCreate clients={clients} />
                     <Button variant="outline-dark" type="submit" className='modal-contentClientCreate' onClick={() => createClient()}>X</Button>
-                </div>
-                <div id='clientsUpdateModal' className="Modal" style={{ display: 'none' }}>
-                    <div onClick={() => updateClient()} className="overlay"></div>
-                    <ClientsUpdate client_id={2} />
-                    <Button variant="outline-dark" type="submit" className='modal-contentClient' onClick={() => updateClient()}>X</Button>
                 </div>
             </div>
         )

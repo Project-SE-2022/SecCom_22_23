@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Modal.css";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
@@ -12,16 +12,20 @@ export default function AlarmsUpdate({ property_id, alarm_id }) {
     var activated2 = "";
     var propertyId2 = "";
 
-    const loadDataAlarm = () => {
-        axios
-            .get("http://localhost:8050/SitesManagementAPI/alarm/" + alarm_id)
-            .then((response) => {
-                document.getElementById("typeSelectedUpd").value = response.data["type"];
-                document.getElementById("alarmNameUpd").value = response.data["name"];
-                document.getElementById("activatedSelectedUpd").value = response.data["activated"];
-            })
-            .catch((err) => console.log(err));
+    const [alarmUse, setAlarmUse] = useState(0);
 
+    const loadDataAlarm = () => {
+        if (alarmUse!==alarm_id){
+            axios
+                .get("http://localhost:8050/SitesManagementAPI/alarm/" + alarm_id)
+                .then((response) => {
+                    document.getElementById("typeSelectedUpd").value = response.data["type"];
+                    document.getElementById("alarmNameUpd").value = response.data["name"];
+                    document.getElementById("activatedSelectedUpd").value = response.data["activated"];
+                })
+                .catch((err) => console.log(err));
+            setAlarmUse(alarm_id);
+        }
     }
 
     const handleSubmitUpdateAlarm = (event) => {

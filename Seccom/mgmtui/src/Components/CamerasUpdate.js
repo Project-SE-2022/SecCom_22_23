@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Modal.css";
 import axios from "axios";
 import Button from 'react-bootstrap/Button';
@@ -12,15 +12,20 @@ export default function Cameras({ property_id, camera_id }) {
     var cameraId2 = "";
     var activated2 = "Deactivated";
 
+    const [cameraUse, setCameraUse] = useState(0);
+
     const loadDataCamera = () => {
-        axios
-            .get("http://localhost:8050/SitesManagementAPI/camera/" + camera_id)
-            .then((response) => {
-                document.getElementById("cameraNameUpdate").value = response.data["name"];
-                document.getElementById("cameraIpUpdate").value = response.data["ip"];
-                document.getElementById("activatedSelectUpdate").value = response.data["activated"];
-            })
-            .catch((err) => console.log(err));
+        if (cameraUse!==camera_id){
+            axios
+                .get("http://localhost:8050/SitesManagementAPI/camera/" + camera_id)
+                .then((response) => {
+                    document.getElementById("cameraNameUpdate").value = response.data["name"];
+                    document.getElementById("cameraIpUpdate").value = response.data["ip"];
+                    document.getElementById("activatedSelectUpdate").value = response.data["activated"];
+                })
+                .catch((err) => console.log(err));
+            setCameraUse(camera_id);
+        }
     }
 
     const handleSubmitUpdateCamera = (event) => {

@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import axios from "axios";
+import ClientsUpdate from '../Components/ClientsUpdate';
 
 export default function UserCard({ nameUser, email, createdOn, client_id }) {
     const navigate = useNavigate();
@@ -22,6 +23,14 @@ export default function UserCard({ nameUser, email, createdOn, client_id }) {
                 alert(`Client deleted `)
             })
             .catch((err) => console.log(err));
+    }
+
+    const updateClient = () => {
+        if (document.getElementById("clientsUpdateModal").style.display == "block") {
+            document.getElementById("clientsUpdateModal").style.display = "none";
+        } else {
+            document.getElementById("clientsUpdateModal").style.display = "block";
+        }
     }
 
     return (
@@ -48,9 +57,14 @@ export default function UserCard({ nameUser, email, createdOn, client_id }) {
                         <span> </span>
                         <Button variant="primary" onClick={() => deleteClient(client_id)}>Delete</Button>
                         <span> </span>
-                        <Button variant="primary" >Update</Button>
+                        <Button variant="primary" onClick={() => updateClient()}>Update</Button>
                     </Card.Body>
                 </Card>
+                <div id='clientsUpdateModal' className="Modal" style={{ display: 'none' }}>
+					<div onClick={() => updateClient()} className="overlay"></div>
+					<ClientsUpdate  />
+					<Button variant="outline-dark" type="submit" className='modal-contentAlarmUpdate' onClick={() => updateClient()}>X</Button>
+				</div>
             </div>
         </>
     );
