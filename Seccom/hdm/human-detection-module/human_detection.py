@@ -15,7 +15,7 @@ from kombu.mixins import ConsumerMixin
 import datetime
 import os
 import glob
-#import redis
+import redis
 
 
 def sendToIntrusionAPI(cam_id, intrusion_timestamp, frame_id):
@@ -25,8 +25,9 @@ def sendToIntrusionAPI(cam_id, intrusion_timestamp, frame_id):
      "frame": frame_id
     }
     #POST
-    r = requests.post('http://127.0.0.1:8060/IntrusionManagementAPI/intrusion/send/cameras', json=payload)
-    print(r.text)
+    r = requests.post('https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/intrusions', json=payload)
+    print("-----")
+
     
 # Kombu Message Consuming Human_Detection_Worker
 class Human_Detection_Worker(ConsumerMixin):
@@ -36,7 +37,8 @@ class Human_Detection_Worker(ConsumerMixin):
         self.queues = queues
         self.database = database
         # Connect to Redis In-Memory Database on localhost port number 6379
-        #self.redisDB = redis.Redis(host= 'localhost', port= '6379')
+        self.redisDB = redis.Redis(host= '15.188.144.253', port= '6379')
+        self.redisDB.flushdb()
         self.output_dir = output_dir
         self.HOGCV = cv2.HOGDescriptor()
         self.HOGCV.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
@@ -126,13 +128,13 @@ class Human_Detection_Worker(ConsumerMixin):
         num_humans_key = f"camera_{camera_id}_frame_{frame_id}_n_humans"
         timestamp_key = f"camera_{camera_id}_frame_{frame_id}_timestamp"
          # Get the updated dictionary with frames, human number and timestamps from Redis In-Memory Database
-        #self.database = self.redisDB.hgetall("redisDB")
+        self.database = self.redisDB.hgetall("redisDB")
         # Decode the dictionary keys and values from byte to string
-        #self.database = {key.decode('utf-8'):value.decode('utf-8') for key,value in self.database.items()}
+        self.database = {key.decode('utf-8'):value.decode('utf-8') for key,value in self.database.items()}
         self.database[num_humans_key] = num_humans
         self.database[timestamp_key] = ts
          # Save the updated dictionary into Redis In-Memory Database
-        #self.redisDB.hmset("redisDB",self.database)
+        self.redisDB.hmset("redisDB",self.database)
 
 
     def alarm_if_needed(self, camera_id, frame_id):
@@ -140,12 +142,12 @@ class Human_Detection_Worker(ConsumerMixin):
         prev1_n_human_key = f"camera_{camera_id}_frame_{frame_id-1}_n_humans"
         prev2_n_human_key = f"camera_{camera_id}_frame_{frame_id-2}_n_humans"
 	# Get the updated dictionary with frames, human number and timestamps from Redis In-Memory Database
-        #self.database = self.redisDB.hgetall("redisDB")
+        self.database = self.redisDB.hgetall("redisDB")
         # Decode the dictionary keys and values from byte to string
-        #self.database = {key.decode('utf-8'):value.decode('utf-8') for key,value in self.database.items()}
-        prev1_frame_n_humans = self.database.get(prev1_n_human_key, 0)
-        curr_frame_n_humans = self.database.get(n_human_key, 0)
-        prev2_frame_n_humans = self.database.get(prev2_n_human_key, 0)
+        self.database = {key.decode('utf-8'):value.decode('utf-8') for key,value in self.database.items()}
+        prev1_frame_n_humans = int(self.database.get(prev1_n_human_key, 0))
+        curr_frame_n_humans = int(self.database.get(n_human_key, 0))
+        prev2_frame_n_humans = int(self.database.get(prev2_n_human_key, 0))
 
         if prev1_frame_n_humans + curr_frame_n_humans + prev2_frame_n_humans >= 3:
             timestamp_key = f"camera_{camera_id}_frame_{frame_id}_timestamp"
