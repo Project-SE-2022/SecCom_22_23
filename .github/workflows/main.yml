@@ -145,7 +145,7 @@ jobs:
     #################################################################
     #ECR Managment UI
     - name: Amazon ECR Client UI
-      id: build-image-clientui
+      id: build-image-mgtmtui
       working-directory: ./mgmtui/
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
