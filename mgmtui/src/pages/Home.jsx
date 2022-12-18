@@ -4,7 +4,6 @@ import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import ClientsCreate from '../Components/ClientsCreate';
 import ClientsUpdate from '../Components/ClientsUpdate';
-import { Row } from 'react-bootstrap';
 
 class Home extends Component {
     constructor(props) {
@@ -21,7 +20,7 @@ class Home extends Component {
     }
 
     getClients = () => {
-        axios.get("http://localhost:8050/SitesManagementAPI/users/", { crossDomain: true })
+        axios.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/management-ui/users", { crossDomain: true })
             .then((response) => {
                 this.setState({
                     clients: response.data
@@ -43,23 +42,12 @@ class Home extends Component {
             }
         }
 
-        const updateClient = () => {
-            if (document.getElementById("clientsUpdateModal").style.display === "block") {
-                document.getElementById("clientsUpdateModal").style.display = "none";
-            } else {
-                document.getElementById("clientsUpdateModal").style.display = "block";
-            }
-        }
-
         return (
             <div>
                 {clients.length > 1 ?
                     <div>
                         <Button variant="outline-primary" type="submit" onClick={() => createClient()}
                             style={{ marginTop: '25px', marginLeft: '1655px' }}> Add new client
-                        </Button>
-                        <Button variant="outline-primary" type="submit" onClick={() => updateClient()}
-                            style={{ marginTop: '25px', marginLeft: '1655px' }}> Update clients
                         </Button>
                         <CardList clients={clients}/>
                     </div>
@@ -73,11 +61,6 @@ class Home extends Component {
                     <div onClick={() => createClient()} className="overlay"></div>
                     <ClientsCreate clients={clients} />
                     <Button variant="outline-dark" type="submit" className='modal-contentClientCreate' onClick={() => createClient()}>X</Button>
-                </div>
-                <div id='clientsUpdateModal' className="Modal" style={{ display: 'none' }}>
-                    <div onClick={() => updateClient()} className="overlay"></div>
-                    <ClientsUpdate clients={clients} />
-                    <Button variant="outline-dark" type="submit" className='modal-contentClientUpdate' onClick={() => updateClient()}>X</Button>
                 </div>
             </div>
         )
