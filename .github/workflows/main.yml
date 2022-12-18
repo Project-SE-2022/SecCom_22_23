@@ -98,35 +98,49 @@ jobs:
 
     #SMAPI ###########################################################
     #ECR SMAPI
-    # - name: Amazon ECR SMAPI
-    #   id: build-image-smapi
-    #   working-directory: ./smapi/
+    - name: Amazon ECR SMAPI
+      id: build-image-smapi
+      working-directory: ./smapi/
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: seccom
+        IMAGE_TAG: smapi
+      run: |
+         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    #ECS SMAPI
+    - name: Amazon ECS task definition SMAPI
+      id: task-def-smapi
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: smapi.json
+        container-name: smapi
+        image: ${{ steps.build-image-smapi.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition SMAPI
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-smapi.outputs.task-definition }}
+        service: smapi-service
+        cluster: fargateCluster
+        wait-for-service-stability: true
+
+
+    #################################################################
+    #ECR Redis 
+    # - name: Amazon ECR Client UI
+    #   id: build-image-redis
+    #   working-directory: ./redis/
     #   env:
     #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
     #     ECR_REPOSITORY: seccom
-    #     IMAGE_TAG: smapi
+    #     IMAGE_TAG: redis
     #   run: |
     #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
     #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
     #      echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-    #ECS SMAPI
-    # - name: Amazon ECS task definition SMAPI
-    #   id: task-def-smapi
-    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-    #   with:
-    #     task-definition: smapi.json
-    #     container-name: smapi
-    #     image: ${{ steps.build-image-smapi.outputs.image }}
-
-    # - name: Deploy Amazon ECS task definition SMAPI
-    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-    #   with:
-    #     task-definition: ${{ steps.task-def-smapi.outputs.task-definition }}
-    #     service: smapi-service
-    #     cluster: fargateCluster
-    #     wait-for-service-stability: true
-
     # Redis ###########################################################
     #ECR Redis 
     # - name: Amazon ECR Redis
@@ -141,7 +155,7 @@ jobs:
     #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
     #      echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-    #ECR Keycloak
+    #ECR Keycloak ###########################################################
     # - name: Amazon ECR Keycloak
     #   id: build-image-keycloak
     #   working-directory: ./keycloak/
