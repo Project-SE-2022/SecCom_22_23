@@ -1,0 +1,157 @@
+name: Deploy to ECR
+
+on:
+ 
+  push:
+    branches: [ main ]
+
+jobs:
+  
+  build:
+
+    name: Build Image
+    runs-on: ubuntu-latest
+
+   
+    steps:
+
+    - name: Check out code
+      uses: actions/checkout@v2
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-3
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    #HDM
+    #ECR HDM
+    # - name: Build, tag, and push image to Amazon ECR HDM
+    #   id: build-image
+    #   working-directory: ./hdm/
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     ECR_REPOSITORY: seccom
+    #     #IMAGE_TAG: hdm
+    #     IMAGE_TAG: ${{ github.sha }}
+    #   run: |
+    #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+    #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    #      echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+
+    #ECS HDM
+    # - name: Fill in the new image ID in the Amazon ECS task definition HDM
+    #   id: task-def-hdm
+    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+    #   with:
+    #     task-definition: hdmtask.json
+    #     container-name: forFargate
+    #     image: ${{ steps.build-image.outputs.image }}
+
+    # - name: Deploy Amazon ECS task definition HDM
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   with:
+    #     task-definition: ${{ steps.task-def-hdm.outputs.task-definition }}
+    #     service: hdm-service
+    #     cluster: fargateCluster
+    #     wait-for-service-stability: true
+
+    #IMAPI
+    #ECR IMAPI
+    # - name: Build, tag, and push image to Amazon ECR IMAPI
+    #   id: build-image2
+    #   working-directory: ./imapi/
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     ECR_REPOSITORY: seccom
+    #     #IMAGE_TAG: hdm
+    #     IMAGE_TAG2: imapi
+    #   run: |
+    #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG2 .
+    #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG2
+    #     echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG2" >> $GITHUB_OUTPUT
+
+    # - name: Fill in the new image ID in the Amazon ECS task definition IMAPI
+    #   id: task-def
+    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+    #   with:
+    #     #task-definition: hdmtask.json
+    #     #container-name: forFargate
+    #     #image: ${{ steps.build-image.outputs.image }}
+    #     task-definition: math-td.json
+    #     container-name: imapi
+    #     image: ${{ steps.build-image2.outputs.image }}
+    #     ######
+
+    # - name: Deploy Amazon ECS task definition IMAPI
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   with:
+    #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+    #     service: my-service
+    #     #cluster: newCluster
+    #     cluster: fargateCluster
+    #     wait-for-service-stability: true
+
+
+    #SMAPI
+    #ECR SMAPI
+    # - name: Amazon ECR SMAPI
+    #   id: build-image-smapi
+    #   working-directory: ./smapi/
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     ECR_REPOSITORY: seccom
+    #     IMAGE_TAG: smapi
+    #   run: |
+    #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+    #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    #      echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    #ECS SMAPI
+    # - name: Amazon ECS task definition SMAPI
+    #   id: task-def-smapi
+    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+    #   with:
+    #     task-definition: smapi.json
+    #     container-name: smapi
+    #     image: ${{ steps.build-image-smapi.outputs.image }}
+
+    # - name: Deploy Amazon ECS task definition SMAPI
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   with:
+    #     task-definition: ${{ steps.task-def-smapi.outputs.task-definition }}
+    #     service: smapi-service
+    #     cluster: fargateCluster
+    #     wait-for-service-stability: true
+
+    #ECR Redis
+    # - name: Amazon ECR Redis
+    #   id: build-image-redis
+    #   working-directory: ./redis/
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     ECR_REPOSITORY: seccom
+    #     IMAGE_TAG: redis
+    #   run: |
+    #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+    #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    #      echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    #ECR Keycloak
+    # - name: Amazon ECR Keycloak
+    #   id: build-image-keycloak
+    #   working-directory: ./keycloak/
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     ECR_REPOSITORY: seccom
+    #     IMAGE_TAG: keycloak
+    #   run: |
+    #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+    #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    #      echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
