@@ -29,7 +29,7 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    #HDM
+    #HDM ###########################################################
     #ECR HDM
     # - name: Build, tag, and push image to Amazon ECR HDM
     #   id: build-image
@@ -62,10 +62,11 @@ jobs:
     #     cluster: fargateCluster
     #     wait-for-service-stability: true
 
-    #IMAPI
+
+    #IMAPI ###########################################################
     #ECR IMAPI
     # - name: Build, tag, and push image to Amazon ECR IMAPI
-    #   id: build-image2
+    #   id: build-image-imapi
     #   working-directory: ./imapi/
     #   env:
     #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -81,13 +82,9 @@ jobs:
     #   id: task-def
     #   uses: aws-actions/amazon-ecs-render-task-definition@v1
     #   with:
-    #     #task-definition: hdmtask.json
-    #     #container-name: forFargate
-    #     #image: ${{ steps.build-image.outputs.image }}
-    #     task-definition: math-td.json
+    #     task-definition: imapi-td.json
     #     container-name: imapi
-    #     image: ${{ steps.build-image2.outputs.image }}
-    #     ######
+    #     image: ${{ steps.build-image-imapi.outputs.image }}
 
     # - name: Deploy Amazon ECS task definition IMAPI
     #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -99,7 +96,7 @@ jobs:
     #     wait-for-service-stability: true
 
 
-    #SMAPI
+    #SMAPI ###########################################################
     #ECR SMAPI
     # - name: Amazon ECR SMAPI
     #   id: build-image-smapi
@@ -130,7 +127,8 @@ jobs:
     #     cluster: fargateCluster
     #     wait-for-service-stability: true
 
-    #ECR Redis
+    # Redis ###########################################################
+    #ECR Redis 
     # - name: Amazon ECR Redis
     #   id: build-image-redis
     #   working-directory: ./redis/
