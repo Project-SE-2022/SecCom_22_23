@@ -39,7 +39,7 @@ class App extends Component {
 	// To get the client's properties
 	getProperties = () => {
 		axios
-			.get("http://localhost:8050/SitesManagementAPI/properties/")
+			.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/properties")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -57,7 +57,7 @@ class App extends Component {
 	// To download an intrusion video
 	download_video = (intrusion_id) => {
 		axios
-			.get("http://localhost:8060/IntrusionManagementAPI/intrusion/video")
+			.get("https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/video")
 			.then((resp) => {
 				window.open(resp.data["url"]);
 			})
@@ -68,7 +68,7 @@ class App extends Component {
 	getCamsAlarms = (property_id) => {
 		// Get cameras
 		axios
-			.get("http://localhost:8050/SitesManagementAPI/cameras/")
+			.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/cameras")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -84,7 +84,7 @@ class App extends Component {
 
 		// Get alarms
 		axios
-			.get("http://localhost:8050/SitesManagementAPI/alarms/")
+			.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/alarms")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -106,7 +106,7 @@ class App extends Component {
 	// To get the camera intrusions
 	getCamsIntrusions = (camera_id) => {
 		axios
-			.get("http://localhost:8060/IntrusionManagementAPI/intrusions/")
+			.get("https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/intrusions")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -134,7 +134,7 @@ class App extends Component {
 		}
 
 		axios
-			.put("http://localhost:8050/SitesManagementAPI/camera/" + camera_id, {
+			.put("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/cameras/" + camera_id, {
 				"name": name,
 				"ip": ip,
 				"activated": value,
@@ -150,7 +150,7 @@ class App extends Component {
 
 				// Refresh cams data
 				axios
-					.get("http://localhost:8050/SitesManagementAPI/cameras/")
+					.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/cameras")
 					.then((resp) => {
 						var array = [];
 						for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -180,7 +180,7 @@ class App extends Component {
 		}
 
 		axios
-			.put("http://localhost:8050/SitesManagementAPI/alarm/" + alarm_id, {
+			.put("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/alarms/" + alarm_id, {
 				"name": name,
 				"type": type,
 				"activated": value,
@@ -196,7 +196,7 @@ class App extends Component {
 
 				// Refresh alarms data
 				axios
-					.get("http://localhost:8050/SitesManagementAPI/alarms/")
+					.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/alarms")
 					.then((resp) => {
 						var array = [];
 						for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
