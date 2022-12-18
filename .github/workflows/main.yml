@@ -141,10 +141,27 @@ jobs:
          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+    
+    #ECS
+    - name: Amazon ECS task definition Client UI
+      id: task-def-clientui
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: client-ui-td.json
+        container-name: clientui
+        image: ${{ steps.build-image-clientui.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition Client UI
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-clientui.outputs.task-definition }}
+        service: clientui-service
+        cluster: fargateCluster
+        wait-for-service-stability: true
 
     #################################################################
     #ECR Managment UI
-    - name: Amazon ECR Client UI
+    - name: Amazon ECR Managment UI
       id: build-image-mgtmtui
       working-directory: ./mgmtui/
       env:
@@ -155,6 +172,23 @@ jobs:
          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    #ECS
+    - name: Amazon ECS task definition Management UI
+     id: task-def-mgtmtui
+     uses: aws-actions/amazon-ecs-render-task-definition@v1
+     with:
+       task-definition: mgmtui-td.json
+       container-name: mgmtui
+       image: ${{ steps.build-image-mgtmtui.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition Management UI
+     uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+     with:
+       task-definition: ${{ steps.task-def-mgtmtui.outputs.task-definition }}
+       service: mgmtui-service
+       cluster: fargateCluster
+       wait-for-service-stability: true
   
     # Redis ###########################################################
     #ECR Redis 
