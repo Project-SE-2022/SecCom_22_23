@@ -129,18 +129,33 @@ jobs:
 
 
     #################################################################
-    #ECR Redis 
-    # - name: Amazon ECR Client UI
-    #   id: build-image-redis
-    #   working-directory: ./redis/
-    #   env:
-    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-    #     ECR_REPOSITORY: seccom
-    #     IMAGE_TAG: redis
-    #   run: |
-    #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-    #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-    #      echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+    #ECR Client UI
+    - name: Amazon ECR Client UI
+      id: build-image-clientui
+      working-directory: ./clientui/
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: seccom
+        IMAGE_TAG: clientui
+      run: |
+         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    #################################################################
+    #ECR Managment UI
+    - name: Amazon ECR Client UI
+      id: build-image-clientui
+      working-directory: ./mgmtui/
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: seccom
+        IMAGE_TAG: mgmtui
+      run: |
+         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+  
     # Redis ###########################################################
     #ECR Redis 
     # - name: Amazon ECR Redis
@@ -150,19 +165,6 @@ jobs:
     #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
     #     ECR_REPOSITORY: seccom
     #     IMAGE_TAG: redis
-    #   run: |
-    #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-    #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-    #      echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-    #ECR Keycloak ###########################################################
-    # - name: Amazon ECR Keycloak
-    #   id: build-image-keycloak
-    #   working-directory: ./keycloak/
-    #   env:
-    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-    #     ECR_REPOSITORY: seccom
-    #     IMAGE_TAG: keycloak
     #   run: |
     #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
     #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
