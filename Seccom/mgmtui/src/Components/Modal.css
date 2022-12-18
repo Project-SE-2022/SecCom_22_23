@@ -109,3 +109,15 @@
     border-radius: 3px;
     width: 50px;
 }
+
+.modal-contentClientUpdate {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(480%, -450%);
+    line-height: 1.4;
+    background: #ffffff;
+    padding: 14px 28px;
+    border-radius: 3px;
+    width: 50px;
+}

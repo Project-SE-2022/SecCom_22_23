@@ -4,7 +4,7 @@ import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import { GrUser } from 'react-icons/gr';
 
-export default function ClientsUpdate({client_id}) {
+export default function ClientsUpdate({clients}) {
 
     var username2 = "";
     var firstname2 = "";
@@ -63,7 +63,16 @@ export default function ClientsUpdate({client_id}) {
                 <form onSubmit={handleSubmitUpdateClient} style={{ textAlign: 'left'}}>
                     <label style={{ marginRight: '3%' }}>Select Client ID: </label>
                     <select id="clientIdSelectedUpdate" onChange={() => updateLabels()}>
-                        <option>{client_id}</option>
+                        <option>----</option>
+                        {clients.length ?
+                            clients.map(client => (
+                                <option>{client.id}</option>
+                            ))
+                            :
+                            (
+                                <option>None</option>
+                            )
+                        }
                     </select>
                     <br></br>
                     <br></br>
