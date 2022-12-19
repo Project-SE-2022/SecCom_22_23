@@ -90,7 +90,7 @@ jobs:
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
          task-definition: ${{ steps.task-def.outputs.task-definition }}
-         service: my-service
+         service: imapi-service
          #cluster: newCluster
          cluster: fargateCluster
          wait-for-service-stability: true
