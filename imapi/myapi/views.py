@@ -88,7 +88,7 @@ class IntrusionSendCameras(APIView):
             intrusion_timestamp = serializer_object.data.get('intrusion_timestamp')
             frame = serializer_object.data.get('frame')
 
-            newIntrusionURL = 'http://imapi:8060/IntrusionManagementAPI/intrusions/'
+            newIntrusionURL = 'http://127.0.0.1:8060/IntrusionManagementAPI/intrusions/'
             
             body = {  
                 'camera_id':camera_id,
@@ -127,4 +127,3 @@ class IntrusionSendCameras(APIView):
             return Response(status=200)
 
         return Response(status=400)
-
