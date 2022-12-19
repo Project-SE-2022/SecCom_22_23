@@ -31,69 +31,69 @@ jobs:
 
     #HDM ###########################################################
     #ECR HDM
-    - name: Build, tag, and push image to Amazon ECR HDM
-      id: build-image
-      working-directory: ./hdm/
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: seccom
-        #IMAGE_TAG: hdm
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-
-    #ECS HDM
-    - name: Fill in the new image ID in the Amazon ECS task definition HDM
-      id: task-def-hdm
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: hdmtask.json
-        container-name: forFargate
-        image: ${{ steps.build-image.outputs.image }}
-
-    - name: Deploy Amazon ECS task definition HDM
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.task-def-hdm.outputs.task-definition }}
-        service: hdm-service
-        cluster: fargateCluster
-        wait-for-service-stability: true
-
-
-    #IMAPI ###########################################################
-   # #ECR IMAPI
-   # - name: Build, tag, and push image to Amazon ECR IMAPI
-   #   id: build-image-imapi
-   #   working-directory: ./imapi/
+   # - name: Build, tag, and push image to Amazon ECR HDM
+   #   id: build-image
+   #   working-directory: ./hdm/
    #   env:
    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
    #     ECR_REPOSITORY: seccom
    #     #IMAGE_TAG: hdm
-   #     IMAGE_TAG2: imapi
+   #     IMAGE_TAG: ${{ github.sha }}
    #   run: |
-   #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG2 .
-   #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG2
-   #     echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG2" >> $GITHUB_OUTPUT
+   #      docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+   #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+   #      echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-   # - name: Fill in the new image ID in the Amazon ECS task definition IMAPI
-   #   id: task-def
+
+    #ECS HDM
+   # - name: Fill in the new image ID in the Amazon ECS task definition HDM
+   #   id: task-def-hdm
    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
    #   with:
-   #     task-definition: imapi-td.json
-   #     container-name: imapi
-   #     image: ${{ steps.build-image-imapi.outputs.image }}
+   #     task-definition: hdmtask.json
+   #     container-name: forFargate
+   #     image: ${{ steps.build-image.outputs.image }}
 
-   # - name: Deploy Amazon ECS task definition IMAPI
-   #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-   #   with:
-   #      task-definition: ${{ steps.task-def.outputs.task-definition }}
-   #      service: imapi-service
-   #      #cluster: newCluster
-   #     cluster: fargateCluster
-   #      wait-for-service-stability: true
+  #  - name: Deploy Amazon ECS task definition HDM
+  #    uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+  #    with:
+  #      task-definition: ${{ steps.task-def-hdm.outputs.task-definition }}
+  #      service: hdm-service
+  #      cluster: fargateCluster
+  #      wait-for-service-stability: true
+
+
+    #IMAPI ###########################################################
+    #ECR IMAPI
+    - name: Build, tag, and push image to Amazon ECR IMAPI
+      id: build-image-imapi
+      working-directory: ./imapi/
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: seccom
+        #IMAGE_TAG: hdm
+        IMAGE_TAG2: imapi
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG2 .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG2
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG2" >> $GITHUB_OUTPUT
+
+    - name: Fill in the new image ID in the Amazon ECS task definition IMAPI
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: imapi-td.json
+        container-name: imapi
+        image: ${{ steps.build-image-imapi.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition IMAPI
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+         task-definition: ${{ steps.task-def.outputs.task-definition }}
+         service: imapi-service
+         #cluster: newCluster
+         cluster: fargateCluster
+         wait-for-service-stability: true
 
 
     #SMAPI ###########################################################
