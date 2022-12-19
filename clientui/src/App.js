@@ -57,7 +57,7 @@ class App extends Component {
 	// To download an intrusion video
 	download_video = (intrusion_id) => {
 		axios
-			.get("http://35.180.204.162:8060/IntrusionManagementAPI/intrusion/video/"+intrusion_id)
+			.get("http://13.36.171.240:8060/IntrusionManagementAPI/intrusion/video/"+intrusion_id)
 			.then((resp) => {
 				window.open(resp.data["url"]);
 			})
@@ -106,7 +106,7 @@ class App extends Component {
 	// To get the camera intrusions
 	getCamsIntrusions = (camera_id) => {
 		axios
-			.get("http://35.180.204.162:8060/IntrusionManagementAPI/intrusions/")
+			.get("http://13.36.171.240:8060/IntrusionManagementAPI/intrusions/")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {

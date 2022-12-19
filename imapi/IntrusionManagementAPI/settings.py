@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 # Added CORS to the API
@@ -62,6 +62,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://0.0.0.0:8060',
     'http://localhost:3000',
     'http://172.26.0.2:3010',
+    'https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1',
 ]
 
 ROOT_URLCONF = 'IntrusionManagementAPI.urls'
