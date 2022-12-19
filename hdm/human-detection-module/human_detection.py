@@ -25,9 +25,14 @@ def sendToIntrusionAPI(cam_id, intrusion_timestamp, frame_id):
      "frame": frame_id
     }
     #POST
-    r = requests.post('https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/video/hdmtocamera', json=payload)
+    #r = requests.post('http://13.36.234.38:8060/IntrusionManagementAPI/intrusion/send/cameras', json=payload)
+    #r = requests.post('http://0.0.0.0:8060/IntrusionManagementAPI/intrusion/send/cameras', json=payload)
+    #r = requests.post('http://192.168.1.7:8060/IntrusionManagementAPI/intrusion/send/cameras', json=payload)
+    
+    r = requests.post('https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/intrusions/hdmtoimapi', json=payload)
+    #r = requests.post('https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/intrusions', json=payload)
     print("-----")
-
+    #print(r.text)
     
 # Kombu Message Consuming Human_Detection_Worker
 class Human_Detection_Worker(ConsumerMixin):
@@ -37,7 +42,7 @@ class Human_Detection_Worker(ConsumerMixin):
         self.queues = queues
         self.database = database
         # Connect to Redis In-Memory Database on localhost port number 6379
-        self.redisDB = redis.Redis(host= '15.188.144.253', port= '6379')
+        self.redisDB = redis.Redis(host= '35.180.120.70', port= '6379')
         self.redisDB.flushdb()
         self.output_dir = output_dir
         self.HOGCV = cv2.HOGDescriptor()
