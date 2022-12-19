@@ -25,7 +25,7 @@ def sendToIntrusionAPI(cam_id, intrusion_timestamp, frame_id):
      "frame": frame_id
     }
     #POST
-    r = requests.post('https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/intrusions', json=payload)
+    r = requests.post('https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/video/hdmtocamera', json=payload)
     print("-----")
 
     
