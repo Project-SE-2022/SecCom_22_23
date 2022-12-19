@@ -4,3 +4,4 @@ opencv-python==4.6.0.66
 imutils==0.5.4
 kombu==5.2.4
 requests==2.25.1
+redis==4.4.0
