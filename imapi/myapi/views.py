@@ -105,7 +105,7 @@ class IntrusionSendCameras(APIView):
 
             broker_username = "broker"
             broker_password = "rabbitmqbroker"
-            broker_url = "b-ca71b7e7-5065-4c38-a312-d3a9ca613905.mq.eu-west-3.amazonaws.com:5671"
+            broker_url = "b-3e4f0d06-16e8-4ae5-86bf-356c81a3f4c4.mq.eu-west-3.amazonaws.com:5671"
             rabbit_url = f"amqp://{broker_username}:{broker_password}" \
                     f"@{broker_url}/"
             conn = Connection(
