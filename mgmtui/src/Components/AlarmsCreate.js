@@ -17,7 +17,7 @@ export default function AlarmsCreate({ property_id }) {
         type2 = document.getElementById("typeSelect").value;
         propertyId2 = document.getElementById("propertyIdSelect").value;
         name2 = document.getElementById("alarmName").value;
-        activated2 = document.getElementById("activatedSelect").value;
+        activated2 = document.getElementById("activatedSelect2").value;
         axios
             .post("http://localhost:8050/SitesManagementAPI/alarms/", {
                 "name": name2,
@@ -50,7 +50,7 @@ export default function AlarmsCreate({ property_id }) {
                     <br></br>
                     <br></br>
                     <label style={{ marginRight: '3%' }}>Alarm's Activated: </label>
-                    <select id="activatedSelect">
+                    <select id="activatedSelect2">
                         <option>----</option>
                         <option>Activated</option>
                         <option>Deactivated</option>

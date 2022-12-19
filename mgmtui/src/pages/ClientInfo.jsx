@@ -64,7 +64,7 @@ class ClientInfo extends Component {
 	// To get the properties
 	getProperties = () => {
 		axios
-			.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/properties")
+			.get("http://localhost:8050/SitesManagementAPI/properties/")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -84,7 +84,7 @@ class ClientInfo extends Component {
 		this.state.propertySelected = property_id;
 		// Get cameras
 		axios
-			.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/cameras")
+			.get("http://localhost:8050/SitesManagementAPI/cameras/")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -100,7 +100,7 @@ class ClientInfo extends Component {
 
 		// Get alarms
 		axios
-			.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/alarms")
+			.get("http://localhost:8050/SitesManagementAPI/alarms/")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -123,7 +123,7 @@ class ClientInfo extends Component {
 	getCamsIntrusions = (camera_id) => {
 		this.state.cameraSelected = camera_id;
 		axios
-			.get("https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/intrusions")
+			.get("http://35.180.204.162:8060/IntrusionManagementAPI/intrusions/")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -146,7 +146,7 @@ class ClientInfo extends Component {
 	// To download the intrusion clipe
 	download_video = (intrusion_id) => {
 		axios
-			.get("https://uh0f9jxi3h.execute-api.eu-west-3.amazonaws.com/IMapi-1/video/")
+			.get("http://35.180.204.162:8060/IntrusionManagementAPI/intrusion/video/"+intrusion_id)
 			.then((resp) => {
 				window.open(resp.data["url"]);
 			})
@@ -166,7 +166,7 @@ class ClientInfo extends Component {
 		}
 
 		axios
-			.put("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/cameras/" + camera_id, {
+			.put("http://localhost:8050/SitesManagementAPI/camera/" + camera_id, {
 				"name": name,
 				"ip": ip,
 				"activated": value,
@@ -199,7 +199,7 @@ class ClientInfo extends Component {
 		}
 
 		axios
-			.put("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/alarms/" + alarm_id, {
+			.put("http://localhost:8050/SitesManagementAPI/alarm/" + alarm_id, {
 				"name": name,
 				"type": type,
 				"activated": value,
@@ -224,7 +224,7 @@ class ClientInfo extends Component {
 		e.stopPropagation()
 
 		axios
-			.delete("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/properties/" + id)
+			.delete("http://localhost:8050/SitesManagementAPI/property/" + id)
 			.then((response) => {
 			})
 			.catch((err) => console.log(err));
@@ -235,7 +235,7 @@ class ClientInfo extends Component {
 		e.stopPropagation()
 
 		axios
-			.delete("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/cameras/" + id)
+			.delete("http://localhost:8050/SitesManagementAPI/camera/" + id)
 			.then((response) => {
 				this.refreshCameras(property_id)
 			})
@@ -246,7 +246,7 @@ class ClientInfo extends Component {
 	// To refresh the cameras data of a property
 	refreshCameras = (property_id) => {
 		axios
-			.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/cameras")
+			.get("http://localhost:8050/SitesManagementAPI/cameras/")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {
@@ -266,7 +266,7 @@ class ClientInfo extends Component {
 		e.stopPropagation()
 
 		axios
-			.delete("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/alarms/" + id)
+			.delete("http://localhost:8050/SitesManagementAPI/alarm/" + id)
 			.then((response) => {
 				this.refreshAlarms(property_id)
 			})
@@ -276,7 +276,7 @@ class ClientInfo extends Component {
 	// To refresh the alarms data of a property 
 	refreshAlarms = (property_id) => {
 		axios
-			.get("https://1t381c1rc9.execute-api.eu-west-3.amazonaws.com/Main/clients-ui/alarms/")
+			.get("http://localhost:8050/SitesManagementAPI/alarms/")
 			.then((resp) => {
 				var array = [];
 				for (let i = 0, len = resp.data.length, id = ""; i < len; i++) {

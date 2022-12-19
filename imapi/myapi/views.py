@@ -34,7 +34,7 @@ class IntrusionDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class IntrusionVideo(APIView):
 
-    def get(self, request):
+    def get(self, request, id):
         try:
             s3_signature ={
             'v4':'s3v4',
@@ -49,7 +49,7 @@ class IntrusionVideo(APIView):
 
             upload_file_bucket = 'seccombucket'
             #TODO: fazer fetch do ID correto
-            upload_file_key = 'intrusions/30.avi'
+            upload_file_key = 'intrusions/'+ str(id) +'.avi'
 
             url = s3.generate_presigned_url(
                 ClientMethod='get_object',
